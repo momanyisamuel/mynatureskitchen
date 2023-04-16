@@ -1,8 +1,12 @@
-import { ChangeEvent, FC, useState } from "react";
+import { api } from "@/utils/api";
+import { error } from "console";
+import { useRouter } from "next/router";
+import { ChangeEvent, FC, FormEvent, useState } from "react";
 
 interface LoginProps {}
 
 const Login: FC<LoginProps> = ({}) => {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,7 +18,17 @@ const Login: FC<LoginProps> = ({}) => {
       [event.target.name]: event.target.value,
     });
   };
-  const onFormSubmit = () => {};
+
+  const { mutate: login, error } = api.admin.login.useMutation({
+    onSuccess:() => {
+      router.push("/dashboard")
+    }
+  });
+
+  const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    login(formData);
+  };
   return (
     <div>
       <div className="container mx-auto flex p-8">
@@ -23,6 +37,9 @@ const Login: FC<LoginProps> = ({}) => {
             <img src="" alt="" className="h-[36px] w-[120px]" />
           </div>
           <div className="overflow-hidden rounded-lg bg-white shadow-xl">
+            <p className="p-8 text-sm text-red-600">
+              {error && "Invalid login credentials"}
+            </p>
             <div className="p-8">
               <form method="POST" className="" onSubmit={onFormSubmit}>
                 <div className="mb-5">
@@ -36,7 +53,7 @@ const Login: FC<LoginProps> = ({}) => {
                   <input
                     type="text"
                     name="email"
-                    onChange={e => handleChange}
+                    onChange={handleChange}
                     className="block w-full p-3"
                   />
                 </div>
@@ -52,7 +69,7 @@ const Login: FC<LoginProps> = ({}) => {
                   <input
                     type="password"
                     name="password"
-                    onChange={e => handleChange}
+                    onChange={handleChange}
                     className="input-text block w-full p-3"
                   />
                 </div>
