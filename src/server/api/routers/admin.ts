@@ -34,14 +34,12 @@ export const adminRouter = createTRPCRouter({
 
         return { success: true };
       }
-
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message:"Invalid email or password"
-      })
+        message: "Invalid email or password",
+      });
     }),
-    sensitive: adminProcedure.mutation(() => {
-      return "sensitive"
-    })
-
+  sensitive: adminProcedure.mutation(() => {
+    return "sensitive";
+  }),
 });

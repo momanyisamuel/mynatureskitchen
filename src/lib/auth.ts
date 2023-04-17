@@ -22,3 +22,4 @@ export const verifyAuth = async (token: string) =>{
         throw new Error("token invalid")
     }
 }
+
