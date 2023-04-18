@@ -4,6 +4,13 @@ import { MAX_FILE_SIZE } from "@/constants/config";
 import { api } from "@/utils/api";
 import { Plus, Trash } from "lucide-react";
 import { AvailabilityPicker } from "../AvailabilityPicker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface indexProps {}
 
@@ -135,11 +142,22 @@ const index: FC<indexProps> = ({}) => {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 bg-white">
       <div className="container mx-auto">
         <div className="flex flex-col gap-2">
           <input type="text" name="title" id="" onChange={handleChange} />
           <input type="text" name="description" id="" onChange={handleChange} />
+          <Select onValueChange={(e) => handleSelectChange}>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+
           <select name="product" id="" onChange={handleSelectChange}>
             <option value="cooking program">cooking program</option>
             <option value="cooking program">cooking program</option>
@@ -177,7 +195,7 @@ const index: FC<indexProps> = ({}) => {
             <label htmlFor="availability" className="text-sm font-medium">
               Availability
             </label>
-            
+
             <AvailabilityPicker
               value={formInput.availability}
               onChange={handleAvailabilityChange}
