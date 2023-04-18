@@ -7,26 +7,15 @@ import {
   addDays,
   endOfWeek,
 } from "date-fns";
+import { api } from "@/utils/api";
 
-const events = [
-  {
-    date: new Date(2023, 3, 1),
-    title: "Event 1",
-    description: "Lorem ipsum dolor sit amet",
-  },
-  {
-    date: new Date(2023, 3, 5),
-    title: "Event 2",
-    description: "Consectetur adipiscing elit",
-  },
-  {
-    date: new Date(2023, 3, 10),
-    title: "Event 3",
-    description: "Sed do eiusmod tempor incididunt",
-  },
-];
 
 const Calendar = () => {
+  const { data: events, refetch } =
+  api.cookingClass.getAvailability.useQuery();
+
+  console.log(events);
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const now = new Date();
   const start = startOfWeek(
@@ -43,7 +32,7 @@ const Calendar = () => {
   );
 
   const isEventDate = (date: any) => {
-    return events.some((event) => {
+    return events?.some((event) => {
       return format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
     });
   };
@@ -76,7 +65,7 @@ const Calendar = () => {
   };
 
   const filteredEvents = selectedDate
-    ? events.filter(
+    ? events?.filter(
         (event: any) =>
           format(event.date, "yyyy-MM-dd") ===
           format(selectedDate, "yyyy-MM-dd")
@@ -84,27 +73,27 @@ const Calendar = () => {
     : events;
 
   return (
-    <div className="rounded-lg bg-white p-4 shadow">
+    <div className="rounded-lg bg-white p-4 mt-8">
       <div className="mb-4 flex items-center justify-between">
         <button
-          className="rounded bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+          className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
           onClick={handlePrevMonth}
         >
           Prev
         </button>
-        <div className="text-lg font-bold">
+        <div className="text-lg font-semibold text-gray-500">
           {format(currentMonth, "MMMM yyyy")}
         </div>
         <button
-          className="rounded bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+          className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
           onClick={handleNextMonth}
         >
           Next
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-2 border w-full">
+      <div className="grid grid-cols-7 gap-2 py-4 w-full">
         {dayNames.map((dayName, index) => (
-          <div key={index} className="text-left font-bold text-gray-600 w-full border">
+          <div key={index} className="text-center uppercase bg-indigo-100 font-semibold text-sm py-2 text-indigo-600 w-full border-indigo-100">
             {dayName}
           </div>
         ))}
@@ -121,28 +110,29 @@ const Calendar = () => {
           </div>
         ))}
       </div>
-      <div className="rounded-lg bg-white p-4 shadow">
+      <div className="rounded bg-white p-4 shadow mt-5">
         <div className="mb-4 flex items-center justify-between">
           <div className="text-lg font-bold">Events</div>
           {selectedDate && (
             <button
-              className="rounded bg-blue-500 p-2 text-white hover:bg-blue-600"
+              className="rounded bg-green-500 px-2 py-2.5 text-white hover:bg-green-600"
               onClick={handleClearFilter}
             >
               Clear Filter
             </button>
           )}
         </div>
-        {filteredEvents.length > 0 ? (
-          <ul className="list-inside list-disc">
-            {filteredEvents.map((event: any, index) => (
-              <li key={index}>
+        {filteredEvents ? (
+          <div className="list-inside list-disc">
+            {filteredEvents?.map((event: any, index) => (
+              <div key={index} className="mb-2 border py-4 px-5">
                 <div className="text-lg font-bold">{event.title}</div>
                 <div className="text-gray-500">{event.description}</div>
-                <div className="text-gray-500">{format(event.date, "yyyy-MM-dd")}</div>
-              </li>
+                <div className="text-gray-500 mb-2">{format(event.date, "yyyy-MM-dd")}</div>
+                <button className="rounded py-2 px-3 bg-green-500 text-white">Book class</button>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <div className="text-gray-500">No events for selected date</div>
         )}

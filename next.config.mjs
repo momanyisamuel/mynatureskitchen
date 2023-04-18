@@ -18,5 +18,8 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ['s3.amazonaws.com'],
+  },
 };
 export default config;

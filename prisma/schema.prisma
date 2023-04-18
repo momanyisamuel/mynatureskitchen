@@ -11,11 +11,38 @@ datasource db {
 }
 
 model CookingClass {
-    id          String   @id @default(auto()) @map("_id") @db.ObjectId
-    title       String
-    description String
-    product     String
-    imageUrl    String
-    createdAt   DateTime @default(now())
-    updatedAt   DateTime
+    id            String         @id @default(auto()) @map("_id") @db.ObjectId
+    title         String
+    description   String
+    product       String
+    imageUrl      String
+    createdAt     DateTime       @default(now())
+    updatedAt     DateTime       @default(now())
+    availability  Availability[]
+    BookedClasses BookedClass[]
+}
+
+model Availability {
+    id        String       @id @default(auto()) @map("_id") @db.ObjectId
+    startDate DateTime
+    endDate   DateTime
+    class     CookingClass @relation(fields: [classId], references: [id])
+    classId   String       @db.ObjectId
+}
+
+model User {
+    id            String        @id @default(auto()) @map("_id") @db.ObjectId
+    name          String
+    email         String        @unique
+    password      String
+    bookedClasses BookedClass[]
+}
+
+model BookedClass {
+    id             String       @id @default(auto()) @map("_id") @db.ObjectId
+    cookingClass   CookingClass @relation(fields: [cookingClassId], references: [id], onDelete: Cascade)
+    cookingClassId String       @db.ObjectId
+    date           DateTime
+    user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId         String       @db.ObjectId
 }
