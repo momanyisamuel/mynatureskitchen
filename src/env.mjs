@@ -19,6 +19,8 @@ const client = z.object({
   AWS_SECRET_ACCESS_KEY: z.string(),
   BUCKET_NAME: z.string(),
   AWS_REGION: z.string(),
+  STRIPE_SECRET_KEY: z.string(),
+  
 });
 
 /**
@@ -34,6 +36,7 @@ const processEnv = {
   AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
   BUCKET_NAME: process.env.BUCKET_NAME,
   AWS_REGION: process.env.AWS_REGION,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

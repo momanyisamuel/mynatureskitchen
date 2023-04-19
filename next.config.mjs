@@ -19,7 +19,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ['s3.amazonaws.com'],
+    domains: ['s3.amazonaws.com', 'files.stripe.com'],
   },
 };
 export default config;

@@ -10,8 +10,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.14",
+    "@next/font": "^13.3.0",
     "@prisma/client": "^4.11.0",
+    "@radix-ui/react-label": "^2.0.1",
     "@radix-ui/react-select": "^1.2.1",
+    "@stripe/react-stripe-js": "^2.1.0",
+    "@stripe/stripe-js": "^1.52.1",
     "@tailwindcss/forms": "^0.5.3",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",

@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useEffect, useState } from "react";
 import Image from "next/image";
 import { MAX_FILE_SIZE } from "@/constants/config";
 import { api } from "@/utils/api";
-import { Plus, Trash } from "lucide-react";
+import { GripVertical, Plus, Trash } from "lucide-react";
 import { AvailabilityPicker } from "../AvailabilityPicker";
 import {
   Select,
@@ -11,6 +11,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "../ui/label";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { X } from "lucide-react";
+import { formatFileSize } from "@/lib/utils";
 
 interface indexProps {}
 
@@ -23,6 +28,12 @@ interface CookingClass {
   file: undefined | File;
   availability: Availability[];
 }
+type ImgData = {
+  name: string;
+  size: number | null;
+  type: string;
+  url: string;
+} | null;
 
 const initialData = {
   title: "",
@@ -46,6 +57,7 @@ const data = [
 const index: FC<indexProps> = ({}) => {
   const [formInput, setformInput] = useState<CookingClass>(initialData);
   const [preview, setPreview] = useState<string>("");
+  const [imgPreview, setImgPreview] = useState<ImgData>(null);
   const [error, setError] = useState<string>("");
   const { mutateAsync: createImgUrl } =
     api.admin.createPresignedUrl.useMutation();
@@ -56,11 +68,20 @@ const index: FC<indexProps> = ({}) => {
   const { mutateAsync: deleteCookingClass } =
     api.admin.deleteCookingClass.useMutation();
 
-  console.log(cookingClasses);
+  const { data: products } = api.checkout.getProducts.useQuery();
+
+  console.log(products);
 
   useEffect(() => {
     if (!formInput.file) return;
     const objectUrl = URL.createObjectURL(formInput.file);
+    console.log(formInput.file);
+    setImgPreview({
+      name: formInput.file.name,
+      size: formInput.file.size,
+      type: formInput.file.type,
+      url: objectUrl
+    });
     setPreview(objectUrl);
 
     //clean up preview
@@ -79,6 +100,7 @@ const index: FC<indexProps> = ({}) => {
   };
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    console.log(`selected`);
     setformInput((prev) => ({
       ...prev,
       [e.target.name]: e.target.options[e.target.selectedIndex]?.value,
@@ -143,29 +165,106 @@ const index: FC<indexProps> = ({}) => {
 
   return (
     <div className="mt-8 bg-white">
-      <div className="container mx-auto">
+      <div className="mx-auto px-5">
         <div className="flex flex-col gap-2">
-          <input type="text" name="title" id="" onChange={handleChange} />
-          <input type="text" name="description" id="" onChange={handleChange} />
-          <Select onValueChange={(e) => handleSelectChange}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-
+          <div>
+            <Label htmlFor="title">Title</Label>
+            <Input
+              id="title"
+              name="title"
+              onChange={handleChange}
+              autoComplete="off"
+            />
+          </div>
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              name="description"
+              onChange={(e) => handleChange}
+              autoComplete="off"
+            />
+          </div>
           <select name="product" id="" onChange={handleSelectChange}>
-            <option value="cooking program">cooking program</option>
-            <option value="cooking program">cooking program</option>
-            <option value="cooking program">cooking program</option>
+            <option selected disabled>
+              Select Product
+            </option>
+            {products?.map((product) => (
+              <option key={product.id} value={product.price?.toString()}>
+                {product.name}
+              </option>
+            ))}
           </select>
-          <label
+          <label className="flex flex-col">
+            {imgPreview ? (
+              <div className="flex h-24 flex-row border-[3px] bg-slate-100 transition-all ease-in">
+                <div className="flex h-full w-[2%] flex-row items-center justify-center border">
+                  <GripVertical className="text-slate-400" />
+                </div>
+                <div className="flex h-full w-[20%] flex-row items-center justify-start border px-5">
+                  <div className="h-16 w-16">
+                    <div className="flex h-full items-center justify-center">
+                    <Image
+                      alt="preview"
+                      className=""
+                      style={{ objectFit: "contain",  height: "auto", width: "auto", position: "relative" }}
+                      width={64}
+                      height={64}
+                      src={imgPreview.url}
+                    />
+                    </div>
+                  </div>
+                  <div className=" ml-4">
+                    <p className="text-sm font-medium uppercase text-slate-400">
+                      {imgPreview.type}
+                    </p>
+                    <p className="text-sm font-medium uppercase text-slate-400">
+                      {formatFileSize(imgPreview.size)}
+                    </p>
+                    <a href={imgPreview.url} className="border-b border-slate-400 text-sm font-medium text-slate-400" download>
+                      Download
+                    </a>
+                  </div>
+                </div>
+                <div className="relative flex h-full w-[78%] flex-row items-center justify-center border px-4">
+                  <div className="w-full">
+                    <p className="mb-1 text-sm font-medium text-slate-400">
+                      Name
+                    </p>
+                    <p className="inline-flex w-full rounded bg-slate-200 px-2 py-1 text-sm font-medium text-slate-400">
+                      {imgPreview.name}
+                    </p>
+                  </div>
+                  <div className=" absolute right-4 top-2 h-5 w-5">
+                    <X
+                      size={18}
+                      onClick={()=> setImgPreview(null)}
+                      className="cursor-pointer text-slate-400 hover:text-slate-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="relative mb-2 flex h-12 cursor-pointer items-center justify-center gap-2 rounded-sm border-[3px] border-dashed border-atlantis-200 bg-atlantis-100 text-sm font-medium">
+                <Plus className="rounded-full border border-atlantis-200 text-atlantis-900 shadow-md" />
+                <span className="inline-flex text-atlantis-900">
+                  Click to upload media | JPG, JPEG, or PNG
+                </span>
+              </div>
+            )}
+             <input
+              type="file"
+              name="file"
+              id="file"
+              onChange={handleFileChange}
+              accept="image/jpg image/png image/jpg"
+              className="sr-only"
+            />
+          </label>
+
+          {/* <label
             htmlFor="file"
-            className="relative h-12 cursor-pointer rounded-sm bg-gray-200 text-sm font-medium"
+            className="relative h-12 cursor-pointer rounded-sm border-[3px] border-dashed border-slate-200 bg-slate-50 text-sm font-medium"
           >
             <span className="sr-only">File input</span>
             <div className="flex h-full items-center justify-center">
@@ -190,9 +289,9 @@ const index: FC<indexProps> = ({}) => {
               accept="image/jpg image/png image/jpg"
               className="sr-only"
             />
-          </label>
+          </label> */}
           <div>
-            <label htmlFor="availability" className="text-sm font-medium">
+            <label htmlFor="availability" className="mb-2 text-sm font-medium">
               Availability
             </label>
 
@@ -202,19 +301,22 @@ const index: FC<indexProps> = ({}) => {
             />
           </div>
           <button
-            className="inline-flex h-12 w-auto min-w-[8rem] justify-center rounded-md bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700"
+            className="inline-flex h-12 w-auto min-w-[8rem] justify-center rounded-md bg-atlantis-600 px-6 py-2 font-medium text-white hover:bg-atlantis-700"
             onClick={handleSubmit}
           >
             Submit
           </button>
         </div>
       </div>
-      <div className="container mx-auto mt-8">
+      <div className="mx-auto mt-8 px-5">
         {/* add table here */}
 
         <div className="grid grid-cols-4 gap-4">
           {cookingClasses?.map((cookingClass) => (
-            <div className="relative rounded-md border shadow-md">
+            <div
+              key={cookingClass.id}
+              className="relative rounded-md border shadow-md"
+            >
               <button
                 onClick={() =>
                   handleDelete(cookingClass.imageUrl, cookingClass.id)

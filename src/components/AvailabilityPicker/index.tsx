@@ -49,7 +49,7 @@ export const AvailabilityPicker = ({ value, onChange }: any) => {
       ))}
       <button
         type="button"
-        className="mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+        className="w-full mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
         onClick={handleAddDate}
       >
         Add Date
