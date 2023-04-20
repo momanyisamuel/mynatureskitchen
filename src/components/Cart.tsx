@@ -1,6 +1,8 @@
 import { useCart } from "@/context/CartContext";
+import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
+import router from "next/router";
 import { FC, Fragment } from "react";
 
 
@@ -11,13 +13,25 @@ interface CartProps {
 
 const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   const { items, removeItem } = useCart();
+  console.log(items)
   const subTotal = items.reduce((acc, item) => (acc += item.unit_amount), 0);
 
-  const handleCheckout = (event: any) => {
-    event.preventDefault();
+  const {mutate:checkout} = api.checkout.checkoutSession.useMutation({
+    onSuccess: ({ url }) => {
+      router.push(url)
+    },
+    onMutate: ({ products }) => {
+      localStorage.setItem('products', JSON.stringify(products))
+    },
+  })
 
-    // checkout(items); //from router
-  };
+  const handleCheckout = () => {
+    console.log('Checkout')
+    checkout({
+      products:items
+    })
+  }
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={setCartSliderIsOpen}>

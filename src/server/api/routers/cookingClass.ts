@@ -17,7 +17,7 @@ export const cookingClassRouter = createTRPCRouter({
     return cookingClasses;
   }),
   getAvailability: publicProcedure.query(async ({ ctx }) => {
-    
+
     const availableClasses = await ctx.prisma.availability.findMany({
       include: { class: true },
     });
@@ -27,7 +27,7 @@ export const cookingClassRouter = createTRPCRouter({
       title: availability.class.title,
       description: availability.class.description,
     }));
-  
+
     return formattedData;
   }),
   bookClasses: publicProcedure

@@ -8,6 +8,7 @@ import {
   endOfWeek,
 } from "date-fns";
 import { api } from "@/utils/api";
+import Router from "next/router";
 
 
 const Calendar = () => {
@@ -129,7 +130,7 @@ const Calendar = () => {
                 <div className="text-lg font-bold">{event.title}</div>
                 <div className="text-gray-500">{event.description}</div>
                 <div className="text-gray-500 mb-2">{format(event.date, "yyyy-MM-dd")}</div>
-                <button className="rounded py-2 px-3 bg-green-500 text-white">Book class</button>
+                <button className="rounded py-2 px-3 bg-green-500 text-white" onClick={()=> Router.push("/classes")}>Book class</button>
               </div>
             ))}
           </div>
