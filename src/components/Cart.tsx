@@ -26,7 +26,6 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   })
 
   const handleCheckout = () => {
-    console.log('Checkout')
     checkout({
       products:items
     })
@@ -99,7 +98,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href={price.product.href}>
+                                        <a href="">
                                           {price.product.name}
                                         </a>
                                       </h3>

@@ -11,7 +11,7 @@ import { api } from "@/utils/api";
 import Router from "next/router";
 
 
-const Calendar = () => {
+const AvailableClasses = () => {
   const { data: events, refetch } =
   api.cookingClass.getAvailability.useQuery();
 
@@ -142,4 +142,4 @@ const Calendar = () => {
   );
 };
 
-export default Calendar;
+export default AvailableClasses;

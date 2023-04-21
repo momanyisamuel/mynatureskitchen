@@ -4,13 +4,6 @@ import { MAX_FILE_SIZE } from "@/constants/config";
 import { api } from "@/utils/api";
 import { GripVertical, Plus, Trash } from "lucide-react";
 import { AvailabilityPicker } from "../AvailabilityPicker";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -68,9 +61,9 @@ const index: FC<indexProps> = ({}) => {
   const { mutateAsync: deleteCookingClass } =
     api.admin.deleteCookingClass.useMutation();
 
-  const { data: products } = api.checkout.getProducts.useQuery();
+  const { data: prices } = api.checkout.getProducts.useQuery();
 
-  console.log(products);
+  console.log(prices);
 
   useEffect(() => {
     if (!formInput.file) return;
@@ -189,9 +182,11 @@ const index: FC<indexProps> = ({}) => {
             <option selected disabled>
               Select Product
             </option>
-            {products?.map((product) => (
-              <option key={product.id} value={product.price?.toString()}>
-                {product.name}
+            
+            {prices?.map((price) => (
+              <option key={price.id} value={price.unit_amount?.toString()}>
+                {/* @ts-ignore */}
+                {price.product ? price.product.name : ""}
               </option>
             ))}
           </select>

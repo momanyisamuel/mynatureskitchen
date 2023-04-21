@@ -7,7 +7,7 @@ import {
   useCallback,
 } from "react";
 
-type Product = {
+type Price = {
   id: string;
   object: string;
   active: boolean;
@@ -55,27 +55,13 @@ type Product = {
   unit_amount_decimal: string;
 };
 
-type ProductList = Product[];
+type Prices = Price[];
 
-type IProduct = {
-    name: string
-    href: string
-    description: string
-    images: string[]
-}
-
-interface ICartItem {
-  id: string;
-  name: string;
-  price: number;
-  product: IProduct
-  unit_amount: number;
-}
 
 interface ICartContext {
-  items: ProductList;
-  addItem: (price: ICartItem) => void;
-  removeItem: (id: number) => void;
+  items: Prices;
+  addItem: (price: Price) => void;
+  removeItem: (id: string) => void;
   resetCart: () => void;
 }
 
@@ -88,18 +74,18 @@ export const useCart = (): ICartContext => {
   return context;
 };
 
-const loadJSON = (key: string): ICartItem[] | null => {
+const loadJSON = (key: string): Prices | null => {
   if (key === null) return null;
   const json = localStorage.getItem(key);
   return json ? JSON.parse(json) : null;
 };
-const saveJSON = (key: string, data: ICartItem[]): void =>
+const saveJSON = (key: string, data: Prices): void =>
   localStorage.setItem(key, JSON.stringify(data));
 
 const CartProvider = ({ children }: any) => {
   const key = `STRIPE_CART_ITEMS`;
   const firstRender = useRef(true);
-  const [items, setItems] = useState<ICartItem[]>([]);
+  const [items, setItems] = useState<Prices>([]);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -112,12 +98,12 @@ const CartProvider = ({ children }: any) => {
   }, [key, items]);
 
   const addItem = useCallback(
-    (price: ICartItem) => setItems((prices) => prices.concat([price])),
+    (price: Price) => setItems((items) => items.concat([price])),
     []
   );
   const removeItem = useCallback(
-    (id: number) =>
-      setItems((prices) => prices.filter((price) => price.id !== id)),
+    (id: string) =>
+      setItems((items) => items.filter((price) => price.id !== id.toString())),
     []
   );
   const resetCart = useCallback(() => setItems([]), []);

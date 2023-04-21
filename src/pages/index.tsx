@@ -4,7 +4,7 @@ import Head from "next/head";
 import Link from "next/link";
 import Calendar from "../components/Calendar"
 import { api } from "@/utils/api";
-import NewCalendar from "@/components/NewCalendar/NewCalendar";
+import NewCalendar from "@/components/AvailableClasses/AvailableClasses";
 
 const Home: NextPageWithLayout = () => {
   return (

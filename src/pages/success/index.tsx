@@ -1,14 +1,14 @@
-import { useCart } from '@/context/CartContext'
-import { FC } from 'react'
+import { useCart } from "@/context/CartContext";
+import { FC, useEffect } from "react";
 
-interface indexProps {
-  
-}
+interface indexProps {}
 
 const index: FC<indexProps> = ({}) => {
+  const { resetCart } = useCart();
+  useEffect(() => {
+    resetCart()
+  }, [resetCart])
+  return <div>index</div>;
+};
 
-    const {resetCart} = useCart
-  return <div>index</div>
-}
-
-export default index
+export default index;

@@ -1,9 +1,10 @@
 import { FC, useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
+import { Price } from "@/types/types";
 
 interface CardProps {
-  price: any;
+  price: Price;
 }
 
 const Card: FC<CardProps> = ({ price }) => {
@@ -11,11 +12,10 @@ const Card: FC<CardProps> = ({ price }) => {
   const [error, setError] = useState<string>("");
   const { product, unit_amount } = price;
 
-  const addItemToCart = (price: any) => {
+  const addItemToCart = (price: Price) => {
     const found = items.find((p) => p.id === price.id);
     if (found) {
       setError("Item has been added!");
-      console.log("Item has been added!")
       return;
     }
     addItem(price);
@@ -31,7 +31,7 @@ const Card: FC<CardProps> = ({ price }) => {
       <div className="relative">
         <div className="relative h-72 w-full overflow-hidden rounded-lg">
           <Image
-            src={product.images[0]}
+            src={product.images[0] ? product.images[0] : ""}
             alt={product.description}
             className="object-scale-down"
             fill
