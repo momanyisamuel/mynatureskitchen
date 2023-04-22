@@ -1,4 +1,6 @@
 import { useCart } from "@/context/CartContext";
+import { fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
@@ -59,7 +61,8 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                  <div className="flex font-sans h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                
+                  <div className={cn("bg-background font-sans antialiased flex  h-full flex-col overflow-y-scroll bg-white shadow-xl", fontSans.variable)}>
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">

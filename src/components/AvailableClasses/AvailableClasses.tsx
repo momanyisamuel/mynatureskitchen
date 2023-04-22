@@ -8,12 +8,10 @@ import {
   endOfWeek,
 } from "date-fns";
 import { api } from "@/utils/api";
-import Router from "next/router";
+import Card from "../Card";
 
-
-const AvailableClasses = () => {
-  const { data: events, refetch } =
-  api.cookingClass.getAvailability.useQuery();
+const AvailableClasses = ({}: any) => {
+  const { data: events, refetch } = api.checkout.getAvailableClasses.useQuery();
 
   console.log(events);
 
@@ -34,7 +32,9 @@ const AvailableClasses = () => {
 
   const isEventDate = (date: any) => {
     return events?.some((event) => {
-      return format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
+      return (
+        format(event.startDate, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+      );
     });
   };
 
@@ -42,10 +42,10 @@ const AvailableClasses = () => {
     return format(date, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
   };
   const isSelectedDate = (date: any) => {
-    if(selectedDate) {
+    if (selectedDate) {
       return format(date, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
     }
-    return false
+    return false;
   };
 
   const handleNextMonth = () => {
@@ -68,13 +68,13 @@ const AvailableClasses = () => {
   const filteredEvents = selectedDate
     ? events?.filter(
         (event: any) =>
-          format(event.date, "yyyy-MM-dd") ===
+          format(event.startDate, "yyyy-MM-dd") ===
           format(selectedDate, "yyyy-MM-dd")
       )
     : events;
 
   return (
-    <div className="rounded-lg bg-white p-4 mt-8">
+    <div className="mt-8 rounded-lg bg-white p-4">
       <div className="mb-4 flex items-center justify-between">
         <button
           className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
@@ -92,16 +92,19 @@ const AvailableClasses = () => {
           Next
         </button>
       </div>
-      <div className="grid grid-cols-7 gap-2 py-4 w-full">
+      <div className="grid w-full grid-cols-7 gap-2 py-4">
         {dayNames.map((dayName, index) => (
-          <div key={index} className="text-center uppercase bg-indigo-100 font-semibold text-sm py-2 text-indigo-600 w-full border-indigo-100">
+          <div
+            key={index}
+            className="w-full border-indigo-100 bg-indigo-100 py-2 text-center text-sm font-semibold uppercase text-indigo-600"
+          >
             {dayName}
           </div>
         ))}
         {days.map((date: any, index) => (
           <div
             key={index}
-            className={`flex h-12 items-center justify-center rounded cursor-pointer p-2 w-full border
+            className={`flex h-12 w-full cursor-pointer items-center justify-center rounded border p-2
               ${isEventDate(date) ? "bg-blue-500 text-white" : ""}
                ${isCurrentDate(date) ? "bg-gray-100" : ""}
                ${isSelectedDate(date) ? "bg-green-500" : ""}`}
@@ -111,7 +114,7 @@ const AvailableClasses = () => {
           </div>
         ))}
       </div>
-      <div className="rounded bg-white p-4 shadow mt-5">
+      <div className="mt-5 rounded bg-white p-4 shadow">
         <div className="mb-4 flex items-center justify-between">
           <div className="text-lg font-bold">Events</div>
           {selectedDate && (
@@ -123,19 +126,17 @@ const AvailableClasses = () => {
             </button>
           )}
         </div>
+
         {filteredEvents ? (
-          <div className="list-inside list-disc">
-            {filteredEvents?.map((event: any, index) => (
-              <div key={index} className="mb-2 border py-4 px-5">
-                <div className="text-lg font-bold">{event.title}</div>
-                <div className="text-gray-500">{event.description}</div>
-                <div className="text-gray-500 mb-2">{format(event.date, "yyyy-MM-dd")}</div>
-                <button className="rounded py-2 px-3 bg-green-500 text-white" onClick={()=> Router.push("/classes")}>Book class</button>
+          <>
+            {filteredEvents?.map((evnt) => (
+              <div>
+                <Card key={evnt.cookingClass.id} price={evnt.price} />
               </div>
             ))}
-          </div>
+          </>
         ) : (
-          <div className="text-gray-500">No events for selected date</div>
+          <>No classes available currently</>
         )}
       </div>
     </div>
