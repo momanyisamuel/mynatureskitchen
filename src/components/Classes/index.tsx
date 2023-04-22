@@ -48,8 +48,8 @@ const data = [
 ];
 
 const index: FC<indexProps> = ({}) => {
+  const { data: prices } = api.checkout.getPrices.useQuery();
   const [formInput, setformInput] = useState<CookingClass>(initialData);
-  const [preview, setPreview] = useState<string>("");
   const [imgPreview, setImgPreview] = useState<ImgData>(null);
   const [error, setError] = useState<string>("");
   const { mutateAsync: createImgUrl } =
@@ -61,21 +61,17 @@ const index: FC<indexProps> = ({}) => {
   const { mutateAsync: deleteCookingClass } =
     api.admin.deleteCookingClass.useMutation();
 
-  const { data: prices } = api.checkout.getProducts.useQuery();
-
-  console.log(prices);
 
   useEffect(() => {
     if (!formInput.file) return;
     const objectUrl = URL.createObjectURL(formInput.file);
-    console.log(formInput.file);
+    
     setImgPreview({
       name: formInput.file.name,
       size: formInput.file.size,
       type: formInput.file.type,
       url: objectUrl
     });
-    setPreview(objectUrl);
 
     //clean up preview
     return () => URL.revokeObjectURL(objectUrl);
@@ -93,62 +89,75 @@ const index: FC<indexProps> = ({}) => {
   };
 
   const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(`selected`);
     setformInput((prev) => ({
       ...prev,
       [e.target.name]: e.target.options[e.target.selectedIndex]?.value,
     }));
   };
   const handleAvailabilityChange = (newValue: any) => {
-    console.log("newValue:", newValue);
     setformInput((prev) => ({
       ...prev,
       availability: newValue,
     }));
   };
 
+  const handleTextAreaChange = (e:ChangeEvent<HTMLTextAreaElement>) => {
+        setformInput((prev) => ({
+          ...prev,
+          [e.target.name]: e.target.value
+        }))
+  }
+
   const handleImageUpload = async () => {
-    const { file } = formInput;
-    if (!file) return;
+      try {
+        const { file } = formInput;
 
-    const { fields, key, url } = await createImgUrl({ filetype: file.type });
+        if (!file) return;
 
-    const data = {
-      ...fields,
-      "Content-Type": file.type,
-      file,
-    };
-    const formData = new FormData();
+        const { fields, key, url } = await createImgUrl({ filetype: file.type });
 
-    Object.entries(data).forEach(([key, value]) => {
-      formData.append(key, value as any);
-    });
+        const data = {
+          ...fields,
+          "Content-Type": file.type,
+          file,
+        };
 
-    const res = await fetch(url, { method: "POST", body: formData });
+        const formData = new FormData();
 
-    console.log(res.url);
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value as any);
+        });
 
-    return { key: key, url: res.url };
+        const res = await fetch(url, { method: "POST", body: formData });
+
+        return { key: key, url: res.url };
+      } catch (error) {
+        setError("Error Uploading file: " + error)
+      }
   };
 
   const handleSubmit = async () => {
-    console.log("submitted");
-    const key = await handleImageUpload();
-    if (!key) throw new Error("no key");
+      try {
+   
+        const key = await handleImageUpload();
 
-    await addCookingClass({
-      title: formInput.title,
-      description: formInput.description,
-      product: formInput.product,
-      imageUrl: key.url + "/" + key.key,
-      availability: formInput.availability,
-    });
+        if (!key) throw new Error("no key");
+    
+        await addCookingClass({
+          title: formInput.title,
+          description: formInput.description,
+          product: formInput.product,
+          imageUrl: key.url + "/" + key.key,
+          availability: formInput.availability,
+        });
+    
+        refetch();
+        setformInput(initialData);
+        setImgPreview(null);
 
-    refetch();
-
-    setformInput(initialData);
-
-    setPreview("");
+      } catch (error) {
+        setError("Couldnt Submit Form, Something went wrong")
+      }
   };
 
   const handleDelete = async (imageUrl: string, id: string) => {
@@ -174,7 +183,7 @@ const index: FC<indexProps> = ({}) => {
             <Textarea
               id="description"
               name="description"
-              onChange={(e) => handleChange}
+              onChange={handleTextAreaChange}
               autoComplete="off"
             />
           </div>
@@ -184,7 +193,7 @@ const index: FC<indexProps> = ({}) => {
             </option>
             
             {prices?.map((price) => (
-              <option key={price.id} value={price.unit_amount?.toString()}>
+              <option key={price.id} value={price.id}>
                 {/* @ts-ignore */}
                 {price.product ? price.product.name : ""}
               </option>
@@ -256,35 +265,6 @@ const index: FC<indexProps> = ({}) => {
               className="sr-only"
             />
           </label>
-
-          {/* <label
-            htmlFor="file"
-            className="relative h-12 cursor-pointer rounded-sm border-[3px] border-dashed border-slate-200 bg-slate-50 text-sm font-medium"
-          >
-            <span className="sr-only">File input</span>
-            <div className="flex h-full items-center justify-center">
-              {preview ? (
-                <div className="">
-                  <Image
-                    alt="preview"
-                    style={{ objectFit: "contain" }}
-                    fill
-                    src={preview}
-                  />
-                </div>
-              ) : (
-                <span>Select Image</span>
-              )}
-            </div>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              onChange={handleFileChange}
-              accept="image/jpg image/png image/jpg"
-              className="sr-only"
-            />
-          </label> */}
           <div>
             <label htmlFor="availability" className="mb-2 text-sm font-medium">
               Availability
@@ -305,7 +285,6 @@ const index: FC<indexProps> = ({}) => {
       </div>
       <div className="mx-auto mt-8 px-5">
         {/* add table here */}
-
         <div className="grid grid-cols-4 gap-4">
           {cookingClasses?.map((cookingClass) => (
             <div

@@ -58,13 +58,50 @@ const ProductSchema = z.object({
 const ProductListSchema = z.array(ProductSchema);
 
 export const CheckoutRouter = createTRPCRouter({
-  getProducts: publicProcedure.query(async ({ ctx }) => {
+  getPrices: publicProcedure.query(async({})=>{
+    const prices = await stripe.prices.list({
+      active: true,
+      limit: 10,
+      expand: ['data.product']
+    })
+
+    return prices.data
+  }),
+  getAvailableClasses: publicProcedure.query(async ({ ctx }) => {
+
+    const availableClasses = await ctx.prisma.availability.findMany({
+      include: { class: true },
+    });
+    
+    if (!availableClasses) {
+      throw new Error("No available classes")
+    }
+    
     const productList = await stripe.prices.list({
       active: true,
       limit: 10,
       expand: ['data.product']
     })
-    return productList.data
+    
+    const productIds = productList.data.map(product => product.id);
+    
+    const filteredClasses = availableClasses.filter(availableClass => productIds.includes(availableClass.class.product))
+    .map(filteredClass => {
+      const { startDate, endDate, class: cookingClass } = filteredClass;
+      const price = productList?.data.find(product => product.id === filteredClass.class.product);
+      const product = productList?.data.find(product => product.id === filteredClass.class.product)?.product;
+  
+      return {startDate, endDate, price, product, cookingClass};
+    });
+
+    if(!filteredClasses) {
+      throw new Error("No classes available")
+    }
+  
+  console.log(filteredClasses);
+  
+
+    return filteredClasses
   }),
   checkoutSession: publicProcedure.input(z.object({
     products: ProductListSchema

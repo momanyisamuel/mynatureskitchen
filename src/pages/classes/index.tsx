@@ -6,14 +6,14 @@ import Stripe from "stripe";
 interface indexProps {}
 
 const index: FC<indexProps> = ({}) => {
-  const { data: products, refetch } = api.checkout.getProducts.useQuery();
+  const { data: availableClasses, refetch } = api.checkout.getAvailableClasses.useQuery();
 
   return (
     <div className="border">
       <div className="mt-8 border">
-        {products?.map((product) => (
+        {availableClasses?.map((availableClass) => (
           <>
-            <Card key={product.id} price={product} />
+            <Card key={ availableClass.product ? availableClass.product.id : "" } price={availableClass.price} />
           </>
         ))}
       </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Price } from "@/types/types";
 
 interface CardProps {
-  price: Price;
+  price: any;
 }
 
 const Card: FC<CardProps> = ({ price }) => {
