@@ -26,7 +26,7 @@ model Availability {
     id        String       @id @default(auto()) @map("_id") @db.ObjectId
     startDate DateTime
     endDate   DateTime
-    class     CookingClass @relation(fields: [classId], references: [id])
+    class     CookingClass @relation(fields: [classId], references: [id], onDelete: Cascade)
     classId   String       @db.ObjectId
 }
 

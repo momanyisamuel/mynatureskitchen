@@ -9,6 +9,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { X } from "lucide-react";
 import { formatFileSize } from "@/lib/utils";
+import { Button } from "../ui/button";
 
 interface indexProps {}
 
@@ -187,7 +188,7 @@ const index: FC<indexProps> = ({}) => {
               autoComplete="off"
             />
           </div>
-          <select name="product" id="" onChange={handleSelectChange}>
+          <select name="product" id="" onChange={handleSelectChange} className="rounded-md border-gray-200">
             <option selected disabled>
               Select Product
             </option>
@@ -275,12 +276,8 @@ const index: FC<indexProps> = ({}) => {
               onChange={handleAvailabilityChange}
             />
           </div>
-          <button
-            className="inline-flex h-12 w-auto min-w-[8rem] justify-center rounded-md bg-atlantis-600 px-6 py-2 font-medium text-white hover:bg-atlantis-700"
-            onClick={handleSubmit}
-          >
-            Submit
-          </button>
+          <Button variant="default" onClick={handleSubmit} className="bg-atlantis-600 hover:bg-atlantis-500">Submit</Button>
+          
         </div>
       </div>
       <div className="mx-auto mt-8 px-5">

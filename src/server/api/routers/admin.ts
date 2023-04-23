@@ -122,49 +122,13 @@ export const adminRouter = createTRPCRouter({
         .deleteObject({ Bucket: "mynatureskitchen", Key: imageUrl })
         .promise();
 
-      
-        const cookingClass = await ctx.prisma.cookingClass.findUnique({
+        await ctx.prisma.availability.deleteMany({
+          where: { classId: id },
+        });
+
+        const cookingClass = await ctx.prisma.cookingClass.delete({
           where: { id },
-          include: { availability: true },
         });
-    
-        if (!cookingClass) {
-          throw new Error(`Cooking class with ID ${id} not found`);
-        }
-    
-        // Delete the associated availability documents
-        const deleteAvailabilityResult = await ctx.prisma.$runCommandRaw({
-          delete: "availability",
-          deletes: cookingClass.availability.map((availability) => ({
-            q: { _id: availability.id },
-            limit: 1,
-          })),
-          writeConcern: { w: "majority" },
-        });
-        
-    
-        if (deleteAvailabilityResult.writeErrors) {
-          throw new Error(
-            `Error deleting availability records: ${JSON.stringify(
-              deleteAvailabilityResult.writeErrors
-            )}`
-          );
-        }
-    
-        // Delete the cooking class document
-        const deleteCookingClassResult = await ctx.prisma.$runCommandRaw({
-          delete: "cookingClass",
-          deletes: [{ q: { _id: id }, limit: 1 }],
-          writeConcern: { w: "majority" },
-        });
-    
-        if (deleteCookingClassResult.writeErrors) {
-          throw new Error(
-            `Error deleting cooking class record: ${JSON.stringify(
-              deleteCookingClassResult.writeErrors
-            )}`
-          );
-        }
     
         return cookingClass;
     }),

@@ -74,7 +74,8 @@ const AvailableClasses = ({}: any) => {
     : events;
 
   return (
-    <div className="mt-8 rounded-lg bg-white p-4">
+    <div className="w-full mt-8 rounded-lg bg-white p-4 flex justify-center items-center gap-6">
+      <div className="w-2/6">
       <div className="mb-4 flex items-center justify-between">
         <button
           className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
@@ -114,9 +115,10 @@ const AvailableClasses = ({}: any) => {
           </div>
         ))}
       </div>
-      <div className="mt-5 rounded bg-white p-4 shadow">
+      </div>
+      <div className="mt-5 rounded bg-white p-4 shadow w-4/6">
+      <div className="text-lg font-bold">Events</div>
         <div className="mb-4 flex items-center justify-between">
-          <div className="text-lg font-bold">Events</div>
           {selectedDate && (
             <button
               className="rounded bg-green-500 px-2 py-2.5 text-white hover:bg-green-600"
@@ -129,9 +131,9 @@ const AvailableClasses = ({}: any) => {
 
         {filteredEvents ? (
           <>
-            {filteredEvents?.map((evnt) => (
-              <div>
-                <Card key={evnt.cookingClass.id} price={evnt.price} />
+            {filteredEvents?.map((event) => (
+              <div className="">
+                <Card key={event.cookingClass.id} price={event.price} />
               </div>
             ))}
           </>
