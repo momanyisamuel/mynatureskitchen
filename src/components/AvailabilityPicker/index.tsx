@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import DatePicker from "react-tailwindcss-datepicker";
-import { Minus, MinusSquare, Plus } from "lucide-react";
+import {  MinusSquare } from "lucide-react";
 
 export const AvailabilityPicker = ({ value, onChange }: any) => {
   const [dates, setDates] = useState(value || []);

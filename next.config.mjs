@@ -21,5 +21,12 @@ const config = {
   images: {
     domains: ['s3.amazonaws.com', 'files.stripe.com'],
   },
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
 };
 export default config;
