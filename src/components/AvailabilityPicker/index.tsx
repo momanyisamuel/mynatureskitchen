@@ -3,11 +3,17 @@
 import { useState } from "react";
 import DatePicker from "react-tailwindcss-datepicker";
 import {  MinusSquare } from "lucide-react";
+import type { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 
-export const AvailabilityPicker = ({ value, onChange }: any) => {
-  const [dates, setDates] = useState(value || []);
+interface AvailabilityPickerProps {
+    value: DateValueType[],
+    onChange: React.Dispatch<React.SetStateAction<DateValueType | DateValueType[]>>
+}
 
-  const handleDateChange = (index: number, date: any) => {
+export const AvailabilityPicker = ({ value, onChange }: AvailabilityPickerProps) => {
+  const [dates, setDates] = useState<DateValueType[]>(value || []);
+
+  const handleDateChange = (index: number, date: DateValueType) => {
     const updatedDates = [...dates];
     updatedDates[index] = date;
     setDates(updatedDates);
@@ -29,7 +35,7 @@ export const AvailabilityPicker = ({ value, onChange }: any) => {
 
   return (
     <div className="relative w-full">
-      {dates.map((date: any, index: number) => (
+      {dates.map((date: DateValueType, index: number) => (
         <div key={index} className="flex w-full mb-2">
           <div className="w-full">
             <DatePicker

@@ -1,4 +1,4 @@
-import Classes from "@/components/Classes";
+import Classes from "@/components/ClassList/ClassList";
 import { FC } from "react";
 
 interface dashboardProps {}

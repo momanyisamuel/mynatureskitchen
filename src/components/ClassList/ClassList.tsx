@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useState } from "react";
 import Image from "next/image";
 import { MAX_FILE_SIZE } from "@/constants/config";
 import { api } from "@/utils/api";
@@ -11,7 +11,7 @@ import { X } from "lucide-react";
 import { formatFileSize } from "@/lib/utils";
 import { Button } from "../ui/button";
 
-interface indexProps {}
+
 
 type Availability = { startDate: string; endDate: string };
 
@@ -37,18 +37,8 @@ const initialData = {
   availability: [],
 };
 
-const columns = [
-  { key: "title", title: "Class Title" },
-  { key: "description", title: "Description" },
-  { key: "product", title: "Product" },
-  { key: "imageUrl", title: "Image url" },
-];
 
-const data = [
-  { title: "Title", description: "Description", product: "Product" },
-];
-
-const index: FC<indexProps> = ({}) => {
+const ClassList = () => {
   const { data: prices } = api.checkout.getPrices.useQuery();
   const [formInput, setformInput] = useState<CookingClass>(initialData);
   const [imgPreview, setImgPreview] = useState<ImgData>(null);
@@ -317,4 +307,4 @@ const index: FC<indexProps> = ({}) => {
   );
 };
 
-export default index;
+export default ClassList;

@@ -66,8 +66,6 @@ export const adminRouter = createTRPCRouter({
         );
       })) as any as { url: string; fields: any };
 
-      console.log(url, key)
-
       return { url, fields, key };
     }),
   addCookingClass: adminProcedure
@@ -93,8 +91,6 @@ export const adminRouter = createTRPCRouter({
       data: { title, description, product, imageUrl },
     });
 
-    console.log(availability)
-
     // Create the `Availability` objects and associate them with the `CookingClass`
     
     const availabilityData = availability.map((avail) => ({
@@ -103,13 +99,9 @@ export const adminRouter = createTRPCRouter({
       classId: cookingClass.id,
     }));
 
-    console.log(availabilityData)
-
     const createdAvailability = await ctx.prisma.availability.createMany({
       data: availabilityData,
     });
-
-    console.log(createdAvailability)
 
     return { ...cookingClass, availability: createdAvailability };
   }),

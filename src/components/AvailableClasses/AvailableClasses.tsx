@@ -10,8 +10,8 @@ import {
 import { api } from "@/utils/api";
 import Card from "../Card";
 
-const AvailableClasses = ({}: any) => {
-  const { data: events, refetch } = api.checkout.getAvailableClasses.useQuery();
+const AvailableClasses = () => {
+  const { data: events } = api.checkout.getAvailableClasses.useQuery();
 
   console.log(events);
 
@@ -24,24 +24,24 @@ const AvailableClasses = ({}: any) => {
     new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0)
   );
   const days = eachDayOfInterval({ start, end });
-  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const startingDayOfWeek = startOfWeek(start, { weekStartsOn: 0 }); // 0 = Sunday
   const dayNames = [...Array(7).keys()].map((i) =>
     format(addDays(startingDayOfWeek, i), "EEE")
   );
 
-  const isEventDate = (date: any) => {
+  const isEventDate = (date: Date) => {
     return events?.some((event) => {
       return (
-        format(event.startDate, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
+        format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
       );
     });
   };
 
-  const isCurrentDate = (date: any) => {
+  const isCurrentDate = (date: Date) => {
     return format(date, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
   };
-  const isSelectedDate = (date: any) => {
+  const isSelectedDate = (date: Date) => {
     if (selectedDate) {
       return format(date, "yyyy-MM-dd") === format(selectedDate, "yyyy-MM-dd");
     }
@@ -58,7 +58,7 @@ const AvailableClasses = ({}: any) => {
     }
   };
 
-  const handleDateClick = (date: any) => {
+  const handleDateClick = (date: Date) => {
     setSelectedDate(date);
   };
   const handleClearFilter = () => {
@@ -67,8 +67,8 @@ const AvailableClasses = ({}: any) => {
 
   const filteredEvents = selectedDate
     ? events?.filter(
-        (event: any) =>
-          format(event.startDate, "yyyy-MM-dd") ===
+        (event) =>
+          format(event.date, "yyyy-MM-dd") ===
           format(selectedDate, "yyyy-MM-dd")
       )
     : events;
@@ -102,7 +102,7 @@ const AvailableClasses = ({}: any) => {
             {dayName}
           </div>
         ))}
-        {days.map((date: any, index) => (
+        {days.map((date: Date, index) => (
           <div
             key={index}
             className={`flex h-12 w-full cursor-pointer items-center justify-center rounded border p-2
@@ -131,9 +131,9 @@ const AvailableClasses = ({}: any) => {
 
         {filteredEvents ? (
           <>
-            {filteredEvents?.map((event) => (
-              <div className="">
-                <Card key={event.cookingClass.id} price={event.price} />
+            {filteredEvents?.map((event,index) => (
+              <div key={index} className="">
+                <Card key={event.id} price={event} />
               </div>
             ))}
           </>

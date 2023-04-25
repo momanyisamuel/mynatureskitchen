@@ -4,8 +4,9 @@ import { cn } from "@/lib/utils";
 import { api } from "@/utils/api";
 import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
+import Image from "next/image";
 import router from "next/router";
-import { FC, Fragment } from "react";
+import { type FC, Fragment } from "react";
 
 
 interface CartProps {
@@ -15,22 +16,21 @@ interface CartProps {
 
 const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   const { items, removeItem } = useCart();
-  console.log(items)
-  const subTotal = items.reduce((acc, item) => (acc += item.unit_amount), 0);
 
-  const {mutate:checkout} = api.checkout.checkoutSession.useMutation({
-    onSuccess: ({ url }) => {
-      router.push(url)
-    },
-    onMutate: ({ products }) => {
-      localStorage.setItem('products', JSON.stringify(products))
-    },
-  })
+  const subTotal = items.reduce((acc, item) => (acc += item.price.unit_amount), 0);
 
-  const handleCheckout = () => {
-    checkout({
-      products:items
+  const {mutateAsync:checkout} = api.checkout.checkoutSession.useMutation()
+
+  const handleCheckout = async () => {
+    const result = await checkout({
+      products: items
     })
+
+    const {url} = result
+    
+    if(url){
+      router.push(url)
+    }
   }
 
   return (
@@ -66,8 +66,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
-                          {" "}
-                          Shopping cart{" "}
+                          Shopping cart
                         </Dialog.Title>
                         <div className="ml-3 flex h-7 items-center">
                           <button
@@ -90,11 +89,13 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                             {items.map((price) => (
                               <li key={price.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  <img
-                                    src={price.product.images[0]}
+                                  {/* <Image
+                                    src={price.product.images[0] ?? "default-image.jpg"}
+                                    width={96}
+                                    height={96}
                                     alt={price.product.description}
                                     className="h-full w-full object-cover object-center"
-                                  />
+                                  /> */}
                                 </div>
 
                                 <div className="ml-4 flex flex-1 flex-col">
@@ -106,7 +107,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                                         </a>
                                       </h3>
                                       <p className="ml-4">
-                                        {(price.unit_amount / 100).toLocaleString(
+                                        {(price.price.unit_amount / 100).toLocaleString(
                                           "en-CA",
                                           {
                                             style: "currency",

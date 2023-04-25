@@ -1,16 +1,16 @@
-import { FC, useState, useEffect } from "react";
+import { type FC, useState, useEffect } from "react";
 import { useCart } from "@/context/CartContext";
 import Image from "next/image";
-import { Price } from "@/types/types";
+import type { Price } from "@/types/types";
 
 interface CardProps {
-  price: any;
+  price: Price
 }
 
 const Card: FC<CardProps> = ({ price }) => {
   const { items, addItem } = useCart();
   const [error, setError] = useState<string>("");
-  const { product, unit_amount } = price;
+  const { product, price:{unit_amount} } = price;
 
   const addItemToCart = (price: Price) => {
     const found = items.find((p) => p.id === price.id);
