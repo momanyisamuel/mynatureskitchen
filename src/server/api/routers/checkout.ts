@@ -12,7 +12,7 @@ const ProductSchema = z.object({
   id: z.string(),
   title: z.string(),
   description: z.string(),
-  date: z.string(),
+  date: z.date(),
   price: z.object({
     id: z.string(),
     unit_amount: z.number(),

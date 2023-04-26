@@ -22,6 +22,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   const {mutateAsync:checkout} = api.checkout.checkoutSession.useMutation()
 
   const handleCheckout = async () => {
+    
     const result = await checkout({
       products: items
     })
