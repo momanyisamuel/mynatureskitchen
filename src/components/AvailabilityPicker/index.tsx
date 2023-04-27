@@ -7,7 +7,7 @@ import type { DateValueType } from "react-tailwindcss-datepicker/dist/types";
 
 interface AvailabilityPickerProps {
     value: DateValueType[],
-    onChange: React.Dispatch<React.SetStateAction<DateValueType | DateValueType[]>>
+    onChange: (newValue: DateValueType[]) => void
 }
 
 export const AvailabilityPicker = ({ value, onChange }: AvailabilityPickerProps) => {
@@ -36,26 +36,28 @@ export const AvailabilityPicker = ({ value, onChange }: AvailabilityPickerProps)
   return (
     <div className="relative w-full">
       {dates.map((date: DateValueType, index: number) => (
-        <div key={index} className="flex w-full mb-2">
+        <div key={index} className="mb-2 flex w-full">
           <div className="w-full">
             <DatePicker
               value={date}
+              useRange={false}
+              asSingle={true}
               onChange={(newDate) => handleDateChange(index, newDate)}
             />
           </div>
-            <button
-              type="button"
-              className="ml-2 text-gray-500 hover:text-gray-700"
-              onClick={() => handleRemoveDate(index)}
-            >
-              <span className="sr-only">Remove date</span>
-              <MinusSquare size={18} className="text-red-500" />
-            </button>
+          <button
+            type="button"
+            className="ml-2 text-gray-500 hover:text-gray-700"
+            onClick={() => handleRemoveDate(index)}
+          >
+            <span className="sr-only">Remove date</span>
+            <MinusSquare size={18} className="text-red-500" />
+          </button>
         </div>
       ))}
       <button
         type="button"
-        className="w-full mt-2 rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+        className="mt-2 w-full rounded-md border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
         onClick={handleAddDate}
       >
         Add Date

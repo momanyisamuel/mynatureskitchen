@@ -1,5 +1,4 @@
-import { FC, ReactNode, useState } from "react";
-import { type NextPage } from "next";
+import { type FC, type ReactNode, useState } from "react";
 import { cn } from "@/lib/utils";
 import { fontSans } from "@/lib/fonts";
 import Cart from "./Cart";

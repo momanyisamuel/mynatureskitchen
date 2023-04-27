@@ -1,4 +1,4 @@
-import { AppProps, type AppType } from "next/app";
+import { type AppProps, type AppType } from "next/app";
 
 import { api } from "@/utils/api";
 
@@ -7,8 +7,8 @@ import "@/styles/Calendar.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import CartProvider from "@/context/CartContext";
 import Layout from "@/components/Layout";
-import { NextPage } from "next";
-import { ReactElement, ReactNode } from "react";
+import { type NextPage } from "next";
+import { type ReactElement, type ReactNode } from "react";
 
 export type NextPageWithLayout<
   TProps = Record<string, unknown>,

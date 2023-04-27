@@ -1,9 +1,7 @@
 import Classes from "@/components/ClassList/ClassList";
-import { FC } from "react";
 
-interface dashboardProps {}
 
-const dashboard: FC<dashboardProps> = ({}) => {
+const dashboard = ({}) => {
   return (
     <div>
       <Classes />

@@ -3,10 +3,16 @@ import { z } from "zod";
 import _stripe from "stripe";
 import { env } from "@/env.mjs";
 import { TRPCError } from "@trpc/server";
-import { Price } from "@/types/types";
-const stripe = new _stripe(env.STRIPE_SECRET_KEY!, {
+import { type Price } from "@/types/types";
+const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
+
+interface ProductModel {
+  id: string;
+  name: string;
+  unit_amount: number | null;
+}
 
 const ProductSchema = z.object({
   id: z.string(),
@@ -29,13 +35,28 @@ const ProductListSchema = z.array(ProductSchema);
 
 export const CheckoutRouter = createTRPCRouter({
   getPrices: publicProcedure.query(async({})=>{
+    const result:ProductModel[] = []
     const prices = await stripe.prices.list({
       active: true,
       limit: 10,
       expand: ['data.product']
     })
-
-    return prices.data
+    for (const price of prices.data) {
+      const product: ProductModel = {
+        id: price.id,
+        unit_amount: price.unit_amount,
+        name: 'Unnamed Product',
+      };
+  
+      if (typeof price.product === 'string') {
+        const stripeProduct = await stripe.products.retrieve(price.product);
+        product.name = stripeProduct.name;
+      }else if (price.product !== null && typeof price.product === 'object') {
+        product.name = (price?.product as _stripe.Product).name;
+      }
+      result.push(product);
+    }  
+    return result; 
   }),
   getAvailableClasses: publicProcedure.query(async ({ ctx }) => {
 
@@ -57,7 +78,7 @@ export const CheckoutRouter = createTRPCRouter({
     
 const filteredClasses: Price[] = availableClasses.filter(availableClass => productIds.includes(availableClass.class.product))
   .map(filteredClass => {
-    const { startDate, endDate, class: cookingClass } = filteredClass;
+    const { date, class: cookingClass } = filteredClass;
     const price = productList?.data.find(product => product.id === filteredClass.class.product);
     const product = productList?.data.find(product => product.id === filteredClass.class.product)?.product;
 
@@ -72,7 +93,7 @@ const filteredClasses: Price[] = availableClasses.filter(availableClass => produ
           id: cookingClass.id,
           title: cookingClass.title,
           description: cookingClass.description,
-          date: startDate,
+          date: new Date(date),
           price:{
             id: price.id,
             unit_amount: price.unit_amount,
@@ -99,7 +120,7 @@ const filteredClasses: Price[] = availableClasses.filter(availableClass => produ
   }),
   checkoutSession: publicProcedure.input(z.object({
     products: ProductListSchema
-  })).mutation(async ({ ctx, input }) => {
+  })).mutation(async ({ input }) => {
     const { products } = input
     if (products.length === 0) {
       throw new TRPCError({ code: "NOT_FOUND", message: "No products" })

@@ -5,13 +5,14 @@ import {
   useContext,
   createContext,
   useCallback,
+  type ReactNode,
 } from "react";
 
 type Price = {
   id: string;
   title: string;
   description: string;
-  date: string;
+  date: Date;
   price: {
     id: string;
     unit_amount: number;
@@ -46,12 +47,16 @@ export const useCart = (): ICartContext => {
 const loadJSON = (key: string): Prices | null => {
   if (key === null) return null;
   const json = localStorage.getItem(key);
-  return json ? JSON.parse(json) : null;
+  return json ? JSON.parse(json || '{}') as Price[] : null
 };
 const saveJSON = (key: string, data: Prices): void =>
   localStorage.setItem(key, JSON.stringify(data));
 
-const CartProvider = ({ children }: any) => {
+interface CartProviderProps {
+  children: ReactNode
+}
+
+const CartProvider = ({ children }: CartProviderProps) => {
   const key = `STRIPE_CART_ITEMS`;
   const firstRender = useRef(true);
   const [items, setItems] = useState<Prices>([]);
@@ -72,7 +77,7 @@ const CartProvider = ({ children }: any) => {
   );
   const removeItem = useCallback(
     (id: string) =>
-      setItems((items) => items.filter((price) => price.id !== id.toString())),
+      setItems((items) => items.filter((price) => price.id !== id)),
     []
   );
   const resetCart = useCallback(() => setItems([]), []);

@@ -1,11 +1,12 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { api } from "@/utils/api";
-import { error } from "console";
 import { useRouter } from "next/router";
-import { ChangeEvent, FC, FormEvent, useState } from "react";
+import { type ChangeEvent, type FC, type FormEvent, useState } from "react";
 
-interface LoginProps {}
 
-const Login: FC<LoginProps> = ({}) => {
+
+const Login: FC = ({}) => {
   const router = useRouter()
   const [formData, setFormData] = useState({
     email: "",
@@ -21,7 +22,7 @@ const Login: FC<LoginProps> = ({}) => {
 
   const { mutate: login, error } = api.admin.login.useMutation({
     onSuccess:() => {
-      router.push("/dashboard")
+      void router.push("/dashboard")
     }
   });
 
@@ -34,7 +35,7 @@ const Login: FC<LoginProps> = ({}) => {
       <div className="container mx-auto flex p-8">
         <div className="mx-auto mt-32 w-full max-w-md">
           <div className="mb-12 flex justify-center font-thin">
-            <img src="" alt="" className="h-[36px] w-[120px]" />
+            
           </div>
           <div className="overflow-hidden rounded-lg bg-white shadow-xl">
             <p className="p-8 text-sm text-red-600">
@@ -50,7 +51,7 @@ const Login: FC<LoginProps> = ({}) => {
                     Email
                   </label>
 
-                  <input
+                  <Input
                     type="text"
                     name="email"
                     onChange={handleChange}
@@ -66,7 +67,7 @@ const Login: FC<LoginProps> = ({}) => {
                     Password
                   </label>
 
-                  <input
+                  <Input
                     type="password"
                     name="password"
                     onChange={handleChange}
@@ -74,9 +75,9 @@ const Login: FC<LoginProps> = ({}) => {
                   />
                 </div>
 
-                <button className="button btn-primary mt-4 w-full p-3">
+                <Button className="">
                   Login
-                </button>
+                </Button>
               </form>
             </div>
           </div>

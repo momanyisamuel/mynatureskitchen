@@ -1,9 +1,5 @@
-import { type NextPage } from "next";
-import { NextPageWithLayout } from './_app';
-import Head from "next/head";
-import Link from "next/link";
-import { api } from "@/utils/api";
-import NewCalendar from "@/components/AvailableClasses/AvailableClasses";
+/* eslint-disable react/no-unescaped-entities */
+import { type NextPageWithLayout } from './_app';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Salad } from "lucide-react";

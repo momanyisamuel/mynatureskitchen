@@ -15,7 +15,6 @@ model CookingClass {
     title         String
     description   String
     product       String
-    imageUrl      String
     createdAt     DateTime       @default(now())
     updatedAt     DateTime       @default(now())
     availability  Availability[]
@@ -23,11 +22,10 @@ model CookingClass {
 }
 
 model Availability {
-    id        String       @id @default(auto()) @map("_id") @db.ObjectId
-    startDate DateTime
-    endDate   DateTime
-    class     CookingClass @relation(fields: [classId], references: [id], onDelete: Cascade)
-    classId   String       @db.ObjectId
+    id      String       @id @default(auto()) @map("_id") @db.ObjectId
+    date    DateTime
+    class   CookingClass @relation(fields: [classId], references: [id], onDelete: Cascade)
+    classId String       @db.ObjectId
 }
 
 model User {

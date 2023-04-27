@@ -1,3 +1,4 @@
+"use client"
 import { useCart } from "@/context/CartContext";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
@@ -6,33 +7,71 @@ import { Dialog, Transition } from "@headlessui/react";
 import { X } from "lucide-react";
 import Image from "next/image";
 import router from "next/router";
-import { type FC, Fragment } from "react";
-
+import { type FC, Fragment, useState } from "react";
 
 interface CartProps {
   open: boolean;
   setCartSliderIsOpen: (value: boolean) => void;
 }
+export const BASEURI = "http://localhost:3000";
 
 const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   const { items, removeItem } = useCart();
+  const [error, setError] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const subTotal = items.reduce((acc, item) => (acc += item.price.unit_amount), 0);
+  const subTotal = items.reduce(
+    (acc, item) => (acc += item.price?.unit_amount),
+    0
+  );
 
-  const {mutateAsync:checkout} = api.checkout.checkoutSession.useMutation()
+  const checkout = api.checkout.checkoutSession.useMutation({
+    onError() {
+      setError(true);
+      return setTimeout(() => {
+        setError(false);
+      }, 1500);
+    },
+    onSuccess({ url }) {
+      void router.push(url || "/");
+    },
+    onMutate({ products }) {
+      localStorage.setItem("products", JSON.stringify(products));
+    },
+    onSettled() {
+      setLoading(false);
+    },
+  });
+
+ 
 
   const handleCheckout = async () => {
-    
-    const result = await checkout({
-      products: items
-    })
-
-    const {url} = result
-    
-    if(url){
-      router.push(url)
+    try {
+      const result = await checkout.mutateAsync({
+        products: items.map((item) => {
+          return {
+            id: item.id,
+            title: item.title,
+            description: item.description,
+            date: new Date(item.date),
+            price: {
+              id: item.price.id,
+              unit_amount: item.price.unit_amount,
+            },
+            product: {
+              id: item.product.id,
+              name: item.product.name,
+              description: item.product.description,
+              images: item.product.images,
+            },
+          };
+        }),
+      });
+      return result;
+    } catch (error) {
+      console.error(error);
     }
-  }
+  };
 
   return (
     <Transition.Root show={open} as={Fragment}>
@@ -62,8 +101,12 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                 leaveTo="translate-x-full"
               >
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
-                
-                  <div className={cn("bg-background font-sans antialiased flex  h-full flex-col overflow-y-scroll bg-white shadow-xl", fontSans.variable)}>
+                  <div
+                    className={cn(
+                      "flex h-full flex-col overflow-y-scroll  bg-background bg-white font-sans antialiased shadow-xl",
+                      fontSans.variable
+                    )}
+                  >
                     <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                       <div className="flex items-start justify-between">
                         <Dialog.Title className="text-lg font-medium text-gray-900">
@@ -90,35 +133,35 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                             {items.map((price) => (
                               <li key={price.id} className="flex py-6">
                                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                  {/* <Image
-                                    src={price.product.images[0] ?? "default-image.jpg"}
+                                  <Image
+                                    src={
+                                      price.product?.images[0] ??
+                                      "/public/default-image.png"
+                                    }
                                     width={96}
                                     height={96}
-                                    alt={price.product.description}
+                                    alt={price.product?.description}
                                     className="h-full w-full object-cover object-center"
-                                  /> */}
+                                  />
                                 </div>
 
                                 <div className="ml-4 flex flex-1 flex-col">
                                   <div>
                                     <div className="flex justify-between text-base font-medium text-gray-900">
                                       <h3>
-                                        <a href="">
-                                          {price.product.name}
-                                        </a>
+                                        <a href="">{price.product?.name}</a>
                                       </h3>
                                       <p className="ml-4">
-                                        {(price.price.unit_amount / 100).toLocaleString(
-                                          "en-CA",
-                                          {
-                                            style: "currency",
-                                            currency: "CAD",
-                                          }
-                                        )}
+                                        {(
+                                          price.price?.unit_amount / 100
+                                        ).toLocaleString("en-CA", {
+                                          style: "currency",
+                                          currency: "CAD",
+                                        })}
                                       </p>
                                     </div>
                                     <p className="mt-1 text-sm text-gray-500">
-                                      {price.product.description}
+                                      {price.product?.description}
                                     </p>
                                   </div>
                                   <div className="flex flex-1 items-end justify-between text-sm">
@@ -156,13 +199,14 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                         Shipping and taxes calculated at checkout.
                       </p>
                       <div className="mt-6">
-                        <a
-                          href="#"
+                        <button
+                          type="button"
+                          // eslint-disable-next-line @typescript-eslint/no-misused-promises
                           onClick={handleCheckout}
                           className="flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-emerald-700"
                         >
                           Checkout
-                        </a>
+                        </button>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>

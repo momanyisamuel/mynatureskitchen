@@ -1,10 +1,8 @@
-import { FC } from 'react'
+import { type FC } from 'react'
 
-interface menuProps {
-  
-}
 
-const menu: FC<menuProps> = ({}) => {
+
+const menu: FC = ({}) => {
   return <div>menu</div>
 }
 
