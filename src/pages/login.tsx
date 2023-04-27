@@ -34,11 +34,8 @@ const Login: FC = ({}) => {
     <div>
       <div className="container mx-auto flex p-8">
         <div className="mx-auto mt-32 w-full max-w-md">
-          <div className="mb-12 flex justify-center font-thin">
-            
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-xl">
-            <p className="p-8 text-sm text-red-600">
+          <div className="overflow-hidden rounded-lg bg-white shadow-xl border">
+            <p className="p-4 text-sm text-red-600">
               {error && "Invalid login credentials"}
             </p>
             <div className="p-8">
