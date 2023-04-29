@@ -34,8 +34,8 @@ const ProductSchema = z.object({
 const ProductListSchema = z.array(ProductSchema);
 
 export const CheckoutRouter = createTRPCRouter({
-  getPrices: publicProcedure.query(async({})=>{
-    const result:ProductModel[] = []
+  getPrices: publicProcedure.query(async ({ }) => {
+    const result: ProductModel[] = []
     const prices = await stripe.prices.list({
       active: true,
       limit: 10,
@@ -47,74 +47,76 @@ export const CheckoutRouter = createTRPCRouter({
         unit_amount: price.unit_amount,
         name: 'Unnamed Product',
       };
-  
+
       if (typeof price.product === 'string') {
         const stripeProduct = await stripe.products.retrieve(price.product);
         product.name = stripeProduct.name;
-      }else if (price.product !== null && typeof price.product === 'object') {
+      } else if (price.product !== null && typeof price.product === 'object') {
         product.name = (price?.product as _stripe.Product).name;
       }
       result.push(product);
-    }  
-    return result; 
+    }
+    return result;
   }),
   getAvailableClasses: publicProcedure.query(async ({ ctx }) => {
 
     const availableClasses = await ctx.prisma.availability.findMany({
       include: { class: true },
     });
-    
+
+    console.log(availableClasses)
+
     if (!availableClasses) {
       throw new Error("No available classes")
     }
-    
+
     const productList = await stripe.prices.list({
       active: true,
       limit: 10,
       expand: ['data.product']
     })
-    
+
     const productIds = productList.data.map(product => product.id);
-    
-const filteredClasses: Price[] = availableClasses.filter(availableClass => productIds.includes(availableClass.class.product))
-  .map(filteredClass => {
-    const { date, class: cookingClass } = filteredClass;
-    const price = productList?.data.find(product => product.id === filteredClass.class.product);
-    const product = productList?.data.find(product => product.id === filteredClass.class.product)?.product;
 
-    // Type guard to check whether 'product' is of type 'Product'
-     const productObj = typeof product === 'object' && product !== null &&
-                        ('name' in product) && ('description' in product) && ('images' in product)
-                          ? product
-                          : undefined;
+    const filteredClasses: Price[] = availableClasses.filter(availableClass => productIds.includes(availableClass.class.product))
+      .map(filteredClass => {
+        const { date, class: cookingClass } = filteredClass;
+        const price = productList?.data.find(product => product.id === filteredClass.class.product);
+        const product = productList?.data.find(product => product.id === filteredClass.class.product)?.product;
 
-      if(price && product && productObj) {
-        return {
-          id: cookingClass.id,
-          title: cookingClass.title,
-          description: cookingClass.description,
-          date: new Date(date),
-          price:{
-            id: price.id,
-            unit_amount: price.unit_amount,
-          },
-          product:{
-            id: productObj.id,
-            name: productObj.name,
-            description: productObj.description,
-            images: productObj.images,
+        // Type guard to check whether 'product' is of type 'Product'
+        const productObj = typeof product === 'object' && product !== null &&
+          ('name' in product) && ('description' in product) && ('images' in product)
+          ? product
+          : undefined;
+
+        if (price && product && productObj) {
+          return {
+            id: cookingClass.id,
+            title: cookingClass.title,
+            description: cookingClass.description,
+            date: new Date(date),
+            price: {
+              id: price.id,
+              unit_amount: price.unit_amount,
+            },
+            product: {
+              id: productObj.id,
+              name: productObj.name,
+              description: productObj.description,
+              images: productObj.images,
+            }
           }
         }
-      }
 
-      return undefined
-  
-      // return {startDate, endDate, price, product, cookingClass};
-    }).filter(price => price !== undefined) as Price[];
+        return undefined
 
-    if(!filteredClasses) {
+        // return {startDate, endDate, price, product, cookingClass};
+      }).filter(price => price !== undefined) as Price[];
+
+    if (!filteredClasses) {
       throw new Error("No classes available")
-    }  
+    }
 
     return filteredClasses
   }),
@@ -126,41 +128,41 @@ const filteredClasses: Price[] = availableClasses.filter(availableClass => produ
       throw new TRPCError({ code: "NOT_FOUND", message: "No products" })
     }
     console.log(products)
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        mode: 'payment',
-        line_items: products.map((product) => ({
-          price_data: {
-            currency: 'usd',
-            product_data: {
-              name: product.product.name,
-            },
-            unit_amount: product.price.unit_amount,
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      line_items: products.map((product) => ({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: product.product.name,
           },
-          quantity: 1,
-        })),
-        shipping_options: [
-          {
-            shipping_rate_data: {
-              type: 'fixed_amount',
-              fixed_amount: {
-                amount: 0,
-                currency: 'usd',
-              },
-              display_name: 'Pickup in store',
+          unit_amount: product.price.unit_amount,
+        },
+        quantity: 1,
+      })),
+      shipping_options: [
+        {
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: {
+              amount: 0,
+              currency: 'usd',
             },
+            display_name: 'Pickup in store',
           },
-        ],
-        success_url: `http://localhost:3000/success`,
-        cancel_url: `http://localhost:3000/classes`,
-      })
+        },
+      ],
+      success_url: `http://localhost:3000/success`,
+      cancel_url: `http://localhost:3000/classes`,
+    })
 
-      if(!session) {
-        throw new Error("could not create session")
-      }
+    if (!session) {
+      throw new Error("could not create session")
+    }
 
-      return {
-        url: session.url
-      }
+    return {
+      url: session.url
+    }
   })
 });

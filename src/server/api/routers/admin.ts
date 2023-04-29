@@ -93,8 +93,6 @@ export const adminRouter = createTRPCRouter({
       } catch (error) {
         console.log(error)
       }
-
-
     }),
 });
 

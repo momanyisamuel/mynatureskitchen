@@ -203,17 +203,17 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                           type="button"
                           // eslint-disable-next-line @typescript-eslint/no-misused-promises
                           onClick={handleCheckout}
-                          className="flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-emerald-700"
+                          className="w-full flex items-center justify-center rounded-md border border-transparent bg-atlantis-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-atlantis-700"
                         >
                           Checkout
                         </button>
                       </div>
                       <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                         <p>
-                          or{" "}
+                          or
                           <button
                             type="button"
-                            className="font-medium text-emerald-600 hover:text-emerald-500"
+                            className="font-medium text-atlantis-600 hover:text-atlantis-500"
                             onClick={() => setCartSliderIsOpen(false)}
                           >
                             Continue Shopping
