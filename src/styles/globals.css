@@ -6,12 +6,15 @@
 body {
   font-family: 'inter', sans-serif; 
 }
-
+.font-serif {
+  font-family: (--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif
+}
 @layer base {
 
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 47.4% 11.2%;
+    --font-serif: "Roboto Serif"
  
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;

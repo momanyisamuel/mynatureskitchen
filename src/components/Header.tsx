@@ -22,8 +22,8 @@ const Header: FC<HeaderProps> = ({ setCartSliderIsOpen }) => {
   const { items } = useCart();
   const [open, setOpen] = useState<boolean>(false);
   return (
-    <div className="font-sans">
-      <header className="flex items-center justify-between px-8 py-4">
+    <div className="font-sans w-full">
+      <header className="flex items-center justify-between px-8 py-4 w-full">
         <div className="flex-1 sm:hidden">
           {open ? (
             <Button onClick={() => setOpen(false)} variant="link">

@@ -3,36 +3,74 @@ import { type NextPageWithLayout } from './_app';
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Salad } from "lucide-react";
+import Link from "next/link";
+import { Input } from '@/components/ui/input';
 
 const Home: NextPageWithLayout = () => {
   return (
     <>
-      <main className="">
+      <main className="text-atlantis-900">
         <div className="items-center justify-center gap-2 pt-5 sm:flex sm:px-8">
-          <div className="border bg-atlantis-200 px-5 py-48 text-left sm:w-1/2">
-            <h2 className="mb-2 px-8 text-3xl font-bold uppercase">
-              Welcome to My natures kitchen
+          <div className="mt-14 px-8 py-2 flex flex-col items-center gap-6 text-center sm:mt-0 sm:w-1/2 sm:px-5">
+            <p className='uppercase text-base leading-7'>My Natures Kitchen</p>
+            <h2 className="mb-2 px-8 text-4xl leading-[43px] font-medium font-serif">
+              The time to enjoy the Whole food plant based lifestyle is now.
             </h2>
             <p className="px-8 text-lg">
-              At My Natures Kitchen LLC we are dedicated to support, encourage
-              and help people who are searching for a way to be able to enjoy
-              the Whole food plant based lifestyle
+              Welcome to My Natures Kitchen website. We offer opportunity for
+              everyone to enjoy a successful whole food plant-based eating
+              lifestyle for a healthier you one step at a time.
             </p>
+            <Link href="/classes" className=''>
+              <div className="text-lg text-atlantis-50 bg-atlantis-300 w-[28rem] px-2 block py-3">
+              <p className='hover:underline'>Upcoming zoom class: Introduction to How Foods Fight Cancer</p>
+              </div>
+            </Link>
+            <div className="">
+              <Button variant="outline" className="inline-flex text-lg border-atlantis-900">
+                Sign up for our food for life classes
+              </Button>
+            </div>
           </div>
-          <div className="relative h-[515px] border object-contain sm:w-1/2">
-            <Image src="/assets/mealthree.jpg" alt="mealone" fill />
+          <div className="relative sm:flex sm:w-1/2 sm:flex-row sm:justify-end">
+            <div className="hidden sm:flex">
+              <Image
+                src="/assets/mealthree.jpg"
+                alt="mealone"
+                fill
+                className="clip-custom absolute inset-0 h-full w-full object-cover"
+                style={{ clipPath: `url(#custom-clip-path)` }}
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="731"
+                height="627"
+                fill="none"
+                viewBox="0 0 731 627"
+              >
+                <clipPath id="custom-clip-path">
+                  <path
+                    fill="#4B931D"
+                    d="M722.736 265.529c-1.311 20.11 5.174 40.222 3.303 60.053-7.488 74.578 11.768 172.62-19.118 236.306-13.477 27.931-35.566 32.96-56.532 39.105-95.652 28.769-196.734 25.696-293.885 25.977-58.216.279-116.244-1.396-174.273-4.748-50.541-3.073-90.545 1.953-139.402-18.716C-6.588 582.558-.719 496.528 1.341 438.986c3.37-98.04-.682-196.082 4.371-294.125 2.06-39.943 11.232-121.503 47.734-121.782 88.914-.839 179.888-15.852 268.24-9.427 64.955 4.749 129.909-9.935 195.051-9.656 36.315.278 199.568-25.608 210.238 50.926 9.173 69.27.441 140.496-4.239 210.607Z"
+                  />
+                </clipPath>
+              </svg>
+            </div>
           </div>
         </div>
 
-        <div className="mt-5 bg-atlantis-200 py-8">
+        <div className="mt-5 bg-atlantis-600 py-8 sm:mx-8">
           <div className="flex items-center justify-center">
-            <h2>Take a look at some of our classes</h2>
+            <div className="w-2/6"><h2 className='text-atlantis-100'>Join our  email list for a free one week meal plan, nutrition classes and other upcoming events!</h2></div>
+            <div className="w-3/6 flex gap-2 justify-end">
+            <Input placeholder='Your email address' className='w-4/6 text-atlantis-100' />
             <Button
               variant="outline"
-              className="ml-4 border-atlantis-700 hover:bg-atlantis-700 hover:text-white"
+              className="bg-atlantis-100 border-atlantis-100 hover:bg-atlantis-200 w-2/6"
             >
-              View our class schedule
+              Subscribe to our newsletter
             </Button>
+            </div>
           </div>
         </div>
 
@@ -154,21 +192,25 @@ const Home: NextPageWithLayout = () => {
             </div>
           </div>
         </div>
-        <div className="bg-atlantis-300 px-8 py-11 flex gap-4">
+        <div className="flex gap-4 bg-atlantis-300 px-8 py-11">
           <div className="w-2/6">
             <p>What Our Customers Say</p>
-            <p>We can tell you about the amazing things we can do for your business, but we think our customers can tell you better. After all, what they think is what really matters.</p>
+            <p>
+              We can tell you about the amazing things we can do for your
+              business, but we think our customers can tell you better. After
+              all, what they think is what really matters.
+            </p>
           </div>
           <div className="w-4/6">
-            <div className=" bg-slate-50 w-[25rem] p-4 shadow-lg">
-            <p className="scroll-m-20 text-2xl font-base tracking-tight">
-              My Natures Kitchen will be at our final market of the season,
-              Sept. 18, 12 pm - 3 pm at Cowles Commons. Leah, the owner, is
-              excited to share her love for plant-based cooking and baking with
-              you. Give one of her desserts a try - you'll love that there are
-              veggies inside!
-            </p>
-            <p className="pt-8">VegLife Des Moines</p>
+            <div className=" w-[25rem] bg-slate-50 p-4 shadow-lg">
+              <p className="font-base scroll-m-20 text-2xl tracking-tight">
+                My Natures Kitchen will be at our final market of the season,
+                Sept. 18, 12 pm - 3 pm at Cowles Commons. Leah, the owner, is
+                excited to share her love for plant-based cooking and baking
+                with you. Give one of her desserts a try - you'll love that
+                there are veggies inside!
+              </p>
+              <p className="pt-8">VegLife Des Moines</p>
             </div>
           </div>
         </div>
