@@ -49,7 +49,7 @@ const About: FC = ({}) => {
         <div className="w-full sm:w-1/2">
           <ReactPlayer
             width="100%"
-            url="https://www.youtube.com/watch?v=ysz5S6PUM-U"
+            url="https://www.youtube.com/watch?v=fbBAMLx72Jc&ab_channel=leahatinda"
           />
         </div>
       </div>
