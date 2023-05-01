@@ -101,7 +101,7 @@ const Home: NextPageWithLayout = () => {
             </p>
           </div>
           <div className="bg-atlantis-400 px-8 flex flex-col sm:flex-row justify-between items-center py-11 gap-4 mb-8 border">
-            <div className="relative mb-4 w-full sm:w-3/6 border">
+            <div className="relative mb-4 w-full sm:w-3/6 ">
               <div className="mb-8 flex justify-between border-b border-atlantis-900">
                 <p className="mb-2 pt-2 font-serif text-xl font-medium">
                   Food for Life Classes
@@ -117,11 +117,11 @@ const Home: NextPageWithLayout = () => {
                 skills and explore new flavors.
               </p>
             </div>
-            <div className="w-3/6 border flex flex-col sm:flex-row justify-center items-center">
-            <div className="w-full sm:w-[50%] flex justify-center items-center border">
+            <div className="w-3/6  flex flex-col sm:flex-row justify-center items-center">
+            <div className="w-full sm:w-[50%] flex justify-center items-center">
               <Image src="/assets/FFL Licensed Instructor Logo.png" width={183} height={212} alt="food license"/>
             </div>
-            <div className="w-full sm:w-[50%] flex  justify-center items-center border">
+            <div className="w-full sm:w-[50%] flex  justify-center items-center">
               <div className="w-full p-5 bg-atlantis-600 flex flex-col justify-center items-center">
               <p className="text-lg text-atlantis-50 mb-2">Upcoming zoom class:Introduction to How Foods Fight Cancer</p>
               <Button variant="secondary" className="w-full">Learn more</Button>
