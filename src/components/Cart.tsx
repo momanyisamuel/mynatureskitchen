@@ -103,7 +103,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                 <Dialog.Panel className="pointer-events-auto w-screen max-w-md">
                   <div
                     className={cn(
-                      "flex h-full flex-col overflow-y-scroll  bg-background bg-white font-sans antialiased shadow-xl",
+                      "flex h-full flex-col overflow-y-scroll  bg-background bg-atlantis-50 font-sans antialiased shadow-xl",
                       fontSans.variable
                     )}
                   >
@@ -213,7 +213,7 @@ const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
                           or
                           <button
                             type="button"
-                            className="font-medium text-atlantis-600 hover:text-atlantis-500"
+                            className="pl-2 font-medium text-atlantis-600 hover:text-atlantis-500"
                             onClick={() => setCartSliderIsOpen(false)}
                           >
                             Continue Shopping

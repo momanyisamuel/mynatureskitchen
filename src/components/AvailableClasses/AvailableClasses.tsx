@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   format,
@@ -7,14 +9,14 @@ import {
   addDays,
   endOfWeek,
 } from "date-fns";
-import { api } from "@/utils/api";
 import Card from "../Card";
+import { type Price } from "@/types/types";
 
-const AvailableClasses = () => {
-  const { data: events } = api.checkout.getAvailableClasses.useQuery();
+interface AvailableClasesProps {
+  events: Price[] | undefined;
+}
 
-  console.log(events);
-
+const AvailableClasses = ({ events }: AvailableClasesProps) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const now = new Date();
   const start = startOfWeek(
@@ -32,9 +34,7 @@ const AvailableClasses = () => {
 
   const isEventDate = (date: Date) => {
     return events?.some((event) => {
-      return (
-        format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd")
-      );
+      return format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
     });
   };
 
@@ -74,71 +74,74 @@ const AvailableClasses = () => {
     : events;
 
   return (
-    <div className="w-full mt-8 rounded-lg bg-white p-4 flex justify-center items-center gap-6">
-      <div className="w-2/6">
-      <div className="mb-4 flex items-center justify-between">
-        <button
-          className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
-          onClick={handlePrevMonth}
-        >
-          Prev
-        </button>
-        <div className="text-lg font-semibold text-gray-500">
-          {format(currentMonth, "MMMM yyyy")}
-        </div>
-        <button
-          className="rounded bg-gray-100 px-2 py-1 text-gray-700 hover:bg-gray-200"
-          onClick={handleNextMonth}
-        >
-          Next
-        </button>
-      </div>
-      <div className="grid w-full grid-cols-7 gap-2 py-4">
-        {dayNames.map((dayName, index) => (
-          <div
-            key={index}
-            className="w-full border-indigo-100 bg-indigo-100 py-2 text-center text-sm font-semibold uppercase text-indigo-600"
-          >
-            {dayName}
+    <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 rounded-lg p-4 mb-5">
+      <div className="flex flex-col sm:flex-row justify-center gap-x-40 items-center w-full">
+        <div className="">
+          <div className="">
+            <div className="mb-3 mt-5 flex items-center justify-between border border-atlantis-900 rounded p-4">
+              <div className="text-lg font-medium">Filter Events</div>
+              <div className="flex items-center justify-between">
+                {selectedDate && (
+                  <button
+                    className="rounded bg-green-500 px-2 py-2.5 text-white hover:bg-green-600"
+                    onClick={handleClearFilter}
+                  >
+                    Clear Filter
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="mb-4 flex items-center justify-between">
+              <button
+                className="rounded bg-atlantis-100 px-2 py-1 text-atlantis-700 hover:bg-gray-200"
+                onClick={handlePrevMonth}
+              >
+                Prev
+              </button>
+              <div className="text-lg font-semibold text-atlantis-900">
+                {format(currentMonth, "MMMM yyyy")}
+              </div>
+              <button
+                className="rounded bg-atlantis-100 px-2 py-1 text-atlantis-700 hover:bg-atlantis-200"
+                onClick={handleNextMonth}
+              >
+                Next
+              </button>
+            </div>
+            <div className="grid w-full grid-cols-7 gap-2 py-4">
+              {dayNames.map((dayName, index) => (
+                <div
+                  key={index}
+                  className="w-full border-atlantis-100 bg-atlantis-100 py-2 text-center text-sm font-base uppercase text-atlantis-900"
+                >
+                  {dayName}
+                </div>
+              ))}
+              {days.map((date: Date, index) => (
+                <div
+                  key={index}
+                  className={`flex h-12 w-full cursor-pointer items-center justify-center rounded border p-2
+              ${isEventDate(date) ? "bg-atlantis-500 text-white" : ""}
+               ${isCurrentDate(date) ? "bg-atlantis-300 text-red-400" : ""}
+               ${isSelectedDate(date) ? "bg-atlantis-500 text-white" : ""}`}
+                  onClick={() => handleDateClick(date)}
+                >
+                  {format(date, "dd")}
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-        {days.map((date: Date, index) => (
-          <div
-            key={index}
-            className={`flex h-12 w-full cursor-pointer items-center justify-center rounded border p-2
-              ${isEventDate(date) ? "bg-blue-500 text-white" : ""}
-               ${isCurrentDate(date) ? "bg-gray-100" : ""}
-               ${isSelectedDate(date) ? "bg-green-500" : ""}`}
-            onClick={() => handleDateClick(date)}
-          >
-            {format(date, "dd")}
-          </div>
-        ))}
-      </div>
-      </div>
-      <div className="mt-5 rounded bg-white p-4 shadow w-4/6">
-      <div className="text-lg font-bold">Events</div>
-        <div className="mb-4 flex items-center justify-between">
-          {selectedDate && (
-            <button
-              className="rounded bg-green-500 px-2 py-2.5 text-white hover:bg-green-600"
-              onClick={handleClearFilter}
-            >
-              Clear Filter
-            </button>
-          )}
         </div>
-
         {filteredEvents ? (
           <>
-            {filteredEvents?.map((event,index) => (
+            {filteredEvents?.map((event, index) => (
               <div key={index} className="">
                 <Card key={event.id} price={event} />
               </div>
             ))}
           </>
         ) : (
-          <>No classes available currently</>
+          <div>No classes available currently</div>
         )}
       </div>
     </div>

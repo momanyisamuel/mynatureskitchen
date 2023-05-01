@@ -36,6 +36,7 @@
     "react-big-calendar": "^1.6.9",
     "react-calendar": "^4.2.1",
     "react-dom": "18.2.0",
+    "react-player": "^2.12.0",
     "react-tailwindcss-datepicker": "^1.4.2",
     "stripe": "^12.1.1",
     "superjson": "1.12.2",

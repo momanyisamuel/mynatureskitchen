@@ -4,6 +4,7 @@ import { fontSans } from "@/lib/fonts";
 import Cart from "./Cart";
 import Header from "./Header";
 import Head from "next/head";
+import Footer from "./Footer";
 
 interface LayoutProps {
   children: ReactNode;
@@ -19,7 +20,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       </Head>
 
       <main
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
+        className={cn("bg-atlantis-50 font-sans antialiased", fontSans.variable)}
       >
         <Header setCartSliderIsOpen={setCartSliderIsOpen} />
         <Cart
@@ -28,6 +29,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         />
         {children}
       </main>
+      <Footer/>
     </>
   );
 };
