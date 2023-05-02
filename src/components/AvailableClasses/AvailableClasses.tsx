@@ -76,7 +76,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
   return (
     <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 rounded-lg p-4 mb-5">
       <div className="flex flex-col sm:flex-row justify-center gap-x-40 items-center w-full">
-        <div className="">
+        <div className="w-2/6">
           <div className="">
             <div className="mb-3 mt-5 flex items-center justify-between border border-atlantis-900 rounded p-4">
               <div className="text-lg font-medium">Filter Events</div>
@@ -133,13 +133,13 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
           </div>
         </div>
         {filteredEvents ? (
-          <>
+          <div className="w-4/6">
             {filteredEvents?.map((event, index) => (
               <div key={index} className="">
                 <Card key={event.id} price={event} />
               </div>
             ))}
-          </>
+          </div>
         ) : (
           <div>No classes available currently</div>
         )}

@@ -11,7 +11,7 @@ interface CardProps {
 const Card: FC<CardProps> = ({ price }) => {
   const { items, addItem } = useCart();
   const [error, setError] = useState<string>("");
-  const { product, price:{unit_amount} } = price;
+  const {title,description, product, price:{unit_amount} } = price;
 
   const addItemToCart = (price: Price) => {
     const found = items.find((p) => p.id === price.id);
@@ -39,8 +39,8 @@ const Card: FC<CardProps> = ({ price }) => {
           />
         </div>
         <div className="relative mt-4">
-          <h3 className="text-xl font-serif font-medium text-atlantis-900">{product.name}</h3>
-          <p className="mt-1 text-lg text-atlantis-900">{product.description}</p>
+          <h3 className="text-xl font-serif font-medium text-atlantis-900">{title}</h3>
+          <p className="mt-1 text-lg text-atlantis-900">{description}</p>
         </div>
         <div className="absolute inset-x-0 top-0 flex h-96 items-end justify-end overflow-hidden rounded-lg p-4">
           <div

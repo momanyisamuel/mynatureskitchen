@@ -20,7 +20,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       </Head>
 
       <main
-        className={cn("bg-atlantis-50 font-sans antialiased", fontSans.variable)}
+        className={cn("bg-atlantis-50 font-sans antialiased overflow-hidden", fontSans.variable)}
       >
         <Header setCartSliderIsOpen={setCartSliderIsOpen} />
         <Cart
