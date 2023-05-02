@@ -20,7 +20,8 @@ const client = z.object({
   BUCKET_NAME: z.string(),
   AWS_REGION: z.string(),
   STRIPE_SECRET_KEY: z.string(),
-  
+  SEND_GRID_KEY: z.string(),
+  SEND_GRID_EMAIL_SENDER: z.string(),
 });
 
 /**
@@ -37,6 +38,8 @@ const processEnv = {
   BUCKET_NAME: process.env.BUCKET_NAME,
   AWS_REGION: process.env.AWS_REGION,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  SEND_GRID_KEY: process.env.SEND_GRID_KEY,
+  SEND_GRID_EMAIL_SENDER: process.env.SEND_GRID_EMAIL_SENDER,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

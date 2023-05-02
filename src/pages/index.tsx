@@ -5,8 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Salad } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
+import { api } from "@/utils/api";
+import { useState } from "react";
 
 const Home: NextPageWithLayout = () => {
+  const mail = api.cookingClass.sendMail.useMutation()
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   return (
     <>
       <main className="text-atlantis-900">
@@ -38,7 +43,7 @@ const Home: NextPageWithLayout = () => {
             </div>
           </div>
           <div className="relative sm:flex sm:w-1/2 sm:flex-row sm:justify-end">
-            <div className="hidden sm:flex">
+            <div className="w-full hidden sm:flex">
               <Image
                 src="/assets/mealthree.jpg"
                 alt="mealone"
@@ -75,13 +80,32 @@ const Home: NextPageWithLayout = () => {
             <div className="flex flex-col sm:flex-row w-full sm:w-3/6 justify-center items-center sm:justify-end gap-2">
               <Input
                 placeholder="Your email address"
+                name="email"
+                value={emailInput}
+                onChange={(e)=> setEmailInput(e.target.value)}
                 className="w-[70%]"
               />
               <Button
                 variant="outline"
                 className="w-[30%] border-atlantis-100 bg-atlantis-100 hover:bg-atlantis-200"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setLoading(true)
+
+                  mail.mutateAsync({email: emailInput}).then((result)=> {
+                    if(result.success){
+                      setLoading(false)
+                      setEmailInput("")
+                    }
+                  }).catch((error)=>{
+                    console.error(error)
+                  })
+                  
+                }}
               >
-                Subscribe to our newsletter
+                {
+                  loading ? ("sending...") : ( `Subscribe to our newsletter`)
+                }
               </Button>
             </div>
           </div>

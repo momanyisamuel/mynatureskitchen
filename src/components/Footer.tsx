@@ -3,8 +3,13 @@ import { FC } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import Logo from "./ui/Logo";
+import { api } from "@/utils/api";
+import { useState } from "react";
 
 const Footer: FC = ({}) => {
+  const mail = api.cookingClass.sendMail.useMutation()
+  const [emailInput, setEmailInput] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   return (
     <div className="bg-atlantis-50">
       <div className="flex flex-col px-8">
@@ -34,19 +39,19 @@ const Footer: FC = ({}) => {
           </div>
           <div className="flex flex-col gap-1 py-5 w-full sm:w-[20%]">
             <Link
-              href="/"
+              href="https://www.facebook.com/profile.php?id=100089897072518"
               className="text-lg font-medium text-atlantis-900"
             >
               <span className="">Facebook</span>
             </Link>
             <Link
-              href="/about"
+              href="https://www.youtube.com/@leahatinda8966"
               className="text-lg font-medium text-atlantis-900"
             >
               <span className="">Youtube</span>
             </Link>
             <Link
-              href="/classes"
+              href="https://www.instagram.com/mynatureskitchen/"
               className="text-lg font-medium text-atlantis-900"
             >
               <span className="">Instagram</span>
@@ -57,12 +62,31 @@ const Footer: FC = ({}) => {
             <p>Sign up to receive news and updates!</p>
 
             <div className="flex w-full gap-2">
-              <Input placeholder="Your email address" className="w-[60%]" />
+              <Input placeholder="Your email address" name="email"
+                value={emailInput}
+                onChange={(e)=> setEmailInput(e.target.value)} className="w-[60%]" />
               <Button
                 variant="outline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setLoading(true)
+
+                  mail.mutateAsync({email: emailInput}).then((result)=> {
+                    if(result.success){
+                      setLoading(false)
+                      setEmailInput("")
+                    }
+                  }).catch((error)=>{
+                    console.error(error)
+                  })
+                  
+                }}
                 className="w-[40%] border-atlantis-100 bg-atlantis-100 hover:bg-atlantis-200"
               >
-                Subscribe
+                
+                {
+                  loading ? ("sending...") : ( `Subscribe`)
+                }
               </Button>
             </div>
           </div>
