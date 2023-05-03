@@ -1,14 +1,7 @@
 "use client";
 
 import { useCart } from "@/context/CartContext";
-import {
-  Facebook,
-  Instagram,
-  MenuIcon,
-  ShoppingBag,
-  X,
-  Youtube,
-} from "lucide-react";
+import { MenuIcon, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { type FC, useState } from "react";
 import { Button } from "./ui/button";
@@ -22,8 +15,8 @@ const Header: FC<HeaderProps> = ({ setCartSliderIsOpen }) => {
   const { items } = useCart();
   const [open, setOpen] = useState<boolean>(false);
   return (
-    <div className="font-sans w-full">
-      <header className="flex items-center justify-between px-8 py-4 w-full">
+    <div className="w-full font-sans">
+      <header className="flex w-full items-center justify-between px-8 py-4">
         <div className="flex-1 sm:hidden">
           {open ? (
             <Button onClick={() => setOpen(false)} variant="link">
@@ -60,7 +53,9 @@ const Header: FC<HeaderProps> = ({ setCartSliderIsOpen }) => {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">
-          <Logo />
+          <Link href="/">
+            <Logo />
+          </Link>
         </div>
         <div className="flex flex-1 items-center justify-end gap-4">
           <div className="ml-auto flow-root lg:ml-8">

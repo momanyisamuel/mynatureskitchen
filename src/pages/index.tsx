@@ -125,7 +125,7 @@ const Home: NextPageWithLayout = () => {
             </p>
           </div>
           <div className="bg-atlantis-400 px-8 flex flex-col sm:flex-row justify-between items-center py-11 gap-4 mb-8 border">
-            <div className="relative mb-4 w-full sm:w-3/6 ">
+            <div className="relative mb-4 w-full sm:w-3/6 sm:ml-2 sm:mr-[7.5rem]">
               <div className="mb-8 flex justify-between border-b border-atlantis-900">
                 <p className="mb-2 pt-2 font-serif text-xl font-medium">
                   Food for Life Classes

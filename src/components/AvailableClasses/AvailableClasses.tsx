@@ -74,11 +74,11 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
     : events;
 
   return (
-    <div className="mt-8 flex w-full flex-col items-center justify-center gap-6 rounded-lg p-4 mb-5">
-      <div className="flex flex-col sm:flex-row justify-center gap-x-40 items-center w-full">
-        <div className="w-2/6">
+    <div className="mb-5 mt-8 flex w-full flex-col items-center justify-center gap-6 rounded-lg px-8">
+      <div className="flex w-full flex-col items-start justify-center gap-x-40 sm:flex-row">
+        <div className="mb-3 w-full sm:w-2/6">
           <div className="">
-            <div className="mb-3 mt-5 flex items-center justify-between border border-atlantis-900 rounded p-4">
+            <div className="mb-3 flex items-center justify-between rounded border border-atlantis-900 p-4">
               <div className="text-lg font-medium">Filter Events</div>
               <div className="flex items-center justify-between">
                 {selectedDate && (
@@ -112,7 +112,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
               {dayNames.map((dayName, index) => (
                 <div
                   key={index}
-                  className="w-full border-atlantis-100 bg-atlantis-100 py-2 text-center text-sm font-base uppercase text-atlantis-900"
+                  className="font-base w-full border-atlantis-100 bg-atlantis-100 py-2 text-center text-sm uppercase text-atlantis-900"
                 >
                   {dayName}
                 </div>
@@ -133,7 +133,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
           </div>
         </div>
         {filteredEvents ? (
-          <div className="w-4/6">
+          <div className="flex w-full flex-col items-center justify-center sm:w-4/6">
             {filteredEvents?.map((event, index) => (
               <div key={index} className="">
                 <Card key={event.id} price={event} />
