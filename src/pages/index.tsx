@@ -38,7 +38,7 @@ const Home: NextPageWithLayout = () => {
                 variant="outline"
                 className="inline-flex border-atlantis-900 text-lg"
               >
-                Sign up for our food for life classes
+                <Link href="/classes">Sign up for our food for life classes</Link>
               </Button>
             </div>
           </div>
@@ -148,7 +148,7 @@ const Home: NextPageWithLayout = () => {
             <div className="w-full sm:w-[50%] flex  justify-center items-center">
               <div className="w-full p-5 bg-atlantis-600 flex flex-col justify-center items-center">
               <p className="text-lg text-atlantis-50 mb-2">Upcoming zoom class:Introduction to How Foods Fight Cancer</p>
-              <Button variant="secondary" className="w-full">Learn more</Button>
+              <Button variant="secondary" className="w-full"><Link href="/classes">Learn more</Link></Button>
               </div>
             </div>
             </div>
