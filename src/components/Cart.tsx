@@ -13,7 +13,6 @@ interface CartProps {
   open: boolean;
   setCartSliderIsOpen: (value: boolean) => void;
 }
-export const BASEURI = "http://localhost:3000";
 
 const Cart: FC<CartProps> = ({ open, setCartSliderIsOpen }: CartProps) => {
   const { items, removeItem } = useCart();

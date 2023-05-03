@@ -4,6 +4,7 @@ import _stripe from "stripe";
 import { env } from "@/env.mjs";
 import { TRPCError } from "@trpc/server";
 import { type Price } from "@/types/types";
+import { useRouter } from 'next/router';
 const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
   apiVersion: "2022-11-15",
 });
@@ -60,11 +61,14 @@ export const CheckoutRouter = createTRPCRouter({
   }),
   getAvailableClasses: publicProcedure.query(async ({ ctx }) => {
 
+  
+  
+  
+    
+
     const availableClasses = await ctx.prisma.availability.findMany({
       include: { class: true },
     });
-
-    console.log(availableClasses)
 
     if (!availableClasses) {
       throw new Error("No available classes")
@@ -127,7 +131,6 @@ export const CheckoutRouter = createTRPCRouter({
     if (products.length === 0) {
       throw new TRPCError({ code: "NOT_FOUND", message: "No products" })
     }
-    console.log(products)
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
@@ -153,8 +156,8 @@ export const CheckoutRouter = createTRPCRouter({
           },
         },
       ],
-      success_url: `http://localhost:3000/success`,
-      cancel_url: `http://localhost:3000/classes`,
+      success_url: `https://mynatureskitchen.com/success`,
+      cancel_url: `https://mynatureskitchen.com/classes`,
     })
 
     if (!session) {
@@ -162,7 +165,8 @@ export const CheckoutRouter = createTRPCRouter({
     }
 
     return {
-      url: session.url
+      url: session.url,
+      session: session
     }
   })
 });
