@@ -11,6 +11,8 @@ import {
 } from "date-fns";
 import Card from "../Card";
 import { type Price } from "@/types/types";
+import { api } from "@/utils/api";
+import EventCard from "../EventCard";
 
 interface AvailableClasesProps {
   events: Price[] | undefined;
@@ -18,6 +20,11 @@ interface AvailableClasesProps {
 
 const AvailableClasses = ({ events }: AvailableClasesProps) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const {
+    data: classEvents,
+    refetch,
+    isLoading,
+  } = api.cookingClass.getEvents.useQuery();
   const now = new Date();
   const start = startOfWeek(
     new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)
@@ -137,6 +144,11 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
             {filteredEvents?.map((event, index) => (
               <div key={index} className="">
                 <Card key={event.id} price={event} />
+              </div>
+            ))}
+            {classEvents?.map((classEvent, index) => (
+              <div key={index}>
+                <EventCard classEvent={classEvent} />
               </div>
             ))}
           </div>

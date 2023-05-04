@@ -22,6 +22,7 @@ const client = z.object({
   STRIPE_SECRET_KEY: z.string(),
   SEND_GRID_KEY: z.string(),
   SEND_GRID_EMAIL_SENDER: z.string(),
+  UPLOADTHING_SECRET: z.string(),
 });
 
 /**
@@ -40,6 +41,7 @@ const processEnv = {
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   SEND_GRID_KEY: process.env.SEND_GRID_KEY,
   SEND_GRID_EMAIL_SENDER: process.env.SEND_GRID_EMAIL_SENDER,
+  UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

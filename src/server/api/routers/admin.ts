@@ -50,7 +50,7 @@ export const adminRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { title, description, product,  availability } = input;
+      const { title, description, product, availability } = input;
 
       try {
         // Create the `CookingClass` in the database
@@ -94,6 +94,47 @@ export const adminRouter = createTRPCRouter({
         console.log(error)
       }
     }),
+  addEvent: adminProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        url: z.string(),
+        timestamp: z.string(),
+        date: z.date(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { title, description, url, timestamp, date } = input;
+
+      try {
+        // Create the `CookingClass` in the database
+
+        const event = await ctx.prisma.event.create({
+          data: { title, description, url, timestamp, date },
+        });
+
+        return { ...event };
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+  deleteEvent: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      try {
+
+        const event = await ctx.prisma.event.delete({
+          where: { id },
+        });
+
+        return event;
+
+      } catch (error) {
+        console.log(error)
+      }
+    })
 });
 
 

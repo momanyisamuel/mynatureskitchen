@@ -10,6 +10,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Event {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    title       String
+    date        DateTime @db.Date
+    timestamp   String
+    description String
+    url         String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now())
+}
+
 model CookingClass {
     id            String         @id @default(auto()) @map("_id") @db.ObjectId
     title         String

@@ -12,6 +12,10 @@ export const cookingClassRouter = createTRPCRouter({
     const cookingClasses = await ctx.prisma.cookingClass.findMany();
     return cookingClasses;
   }),
+  getEvents: publicProcedure.query(async ({ ctx }) => {
+    const events = await ctx.prisma.event.findMany();
+    return events;
+  }),
   getAvailability: publicProcedure.query(async ({ ctx }) => {
 
     const availableClasses = await ctx.prisma.availability.findMany({

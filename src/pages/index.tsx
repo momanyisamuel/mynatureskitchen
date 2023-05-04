@@ -43,7 +43,7 @@ const Home: NextPageWithLayout = () => {
             </div>
           </div>
           <div className="relative sm:flex sm:w-1/2 sm:flex-row sm:justify-end">
-            <div className="w-full hidden sm:flex">
+            <div className="w-full sm:flex">
               <Image
                 src="/assets/mealthree.jpg"
                 alt="mealone"
@@ -53,10 +53,11 @@ const Home: NextPageWithLayout = () => {
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="731"
-                height="627"
+                width="100%"
+                height="100%"
                 fill="none"
-                viewBox="0 0 731 627"
+                preserveAspectRatio="none"
+                viewBox="0 0 100 100"
               >
                 <clipPath id="custom-clip-path">
                   <path
@@ -73,7 +74,7 @@ const Home: NextPageWithLayout = () => {
           <div className=" w-full flex flex-col sm:flex-row items-center justify-center px-8">
             <div className="w-full sm:w-3/6">
               <h2 className="">
-                Join our email list for a free one week meal plan, nutrition
+                Join our quarterly email list for a free one week meal plan, nutrition
                 classes and other upcoming events!
               </h2>
             </div>

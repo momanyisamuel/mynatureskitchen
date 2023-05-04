@@ -9,6 +9,7 @@ body {
 .font-serif {
   font-family: (--font-serif), ui-serif, Georgia, Cambria, "Times New Roman", Times, serif
 }
+
 @layer base {
 
   :root {
