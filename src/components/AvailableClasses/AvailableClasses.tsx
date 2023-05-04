@@ -45,6 +45,12 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
     });
   };
 
+  const isClassEventDate = (date: Date) => {
+    return classEvents?.some((event) => {
+      return format(event.date, "yyyy-MM-dd") === format(date, "yyyy-MM-dd");
+    });
+  };
+
   const isCurrentDate = (date: Date) => {
     return format(date, "yyyy-MM-dd") === format(now, "yyyy-MM-dd");
   };
@@ -79,6 +85,13 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
           format(selectedDate, "yyyy-MM-dd")
       )
     : events;
+    const filteredClassEvents = selectedDate
+    ? classEvents?.filter(
+        (event) =>
+          format(event.date, "yyyy-MM-dd") ===
+          format(selectedDate, "yyyy-MM-dd")
+      )
+    : classEvents;
 
   return (
     <div className="mb-5 mt-8 flex w-full flex-col items-center justify-center gap-6 rounded-lg px-8">
@@ -129,6 +142,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
                   key={index}
                   className={`flex h-12 w-full cursor-pointer items-center justify-center rounded border p-2
               ${isEventDate(date) ? "bg-atlantis-500 text-white" : ""}
+              ${isClassEventDate(date) ? "bg-atlantis-500 text-white" : ""}
                ${isCurrentDate(date) ? "bg-atlantis-300 text-red-400" : ""}
                ${isSelectedDate(date) ? "bg-atlantis-500 text-white" : ""}`}
                   onClick={() => handleDateClick(date)}
@@ -146,7 +160,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
                 <Card key={event.id} price={event} />
               </div>
             ))}
-            {classEvents?.map((classEvent, index) => (
+            {filteredClassEvents?.map((classEvent, index) => (
               <div key={index}>
                 <EventCard classEvent={classEvent} />
               </div>

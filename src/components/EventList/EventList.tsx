@@ -16,9 +16,9 @@ const EventList = () => {
   const deleteCookingClass = api.admin.deleteEvent.useMutation();
 
   return (
-    <div className="mt-12 bg-white py-12">
+    <div className="mt-2 bg-white py-12">
       <div className="flex items-center justify-between space-y-2 px-12">
-        <h2 className="text-3xl font-medium tracking-tight">Dashboard</h2>
+        <h2 className="text-3xl font-medium tracking-tight">Events</h2>
         <div className="flex items-center space-x-2">
           <div className="grid gap-2">
             <AddEvent />
