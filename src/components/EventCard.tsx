@@ -22,8 +22,8 @@ const EventCard: FC<EventCardProps> = ({ classEvent }) => {
   return (
     <div>
       {" "}
-      <div className="mb-5">
-        <div className="relative">
+      <div className="mb-5 w-[300px] sm:w-[800px]">
+        <div className="relative w-full">
           <div className="relative h-96 w-full overflow-hidden rounded-lg border">
             <Image
               src={classEvent.product}
