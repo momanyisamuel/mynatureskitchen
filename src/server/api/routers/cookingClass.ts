@@ -1,8 +1,12 @@
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import { z } from "zod";
 import sgMail from "@sendgrid/mail"
+import _stripe from "stripe";
 import { env } from "@/env.mjs";
 sgMail.setApiKey(env.SEND_GRID_KEY);
+const stripe = new _stripe(env.STRIPE_SECRET_KEY, {
+  apiVersion: "2022-11-15",
+});
 
 export const sleep = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,7 +18,27 @@ export const cookingClassRouter = createTRPCRouter({
   }),
   getEvents: publicProcedure.query(async ({ ctx }) => {
     const events = await ctx.prisma.event.findMany();
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      const productList = await stripe.prices.list({
+        active: true,
+        limit: 10,
+        expand: ['data.product']
+      });
+      const product = productList.data.find((product) => product.id === event?.product);
+      if (!product) {
+        throw new Error("Product not found");
+      }
+      if (event) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+        event.product = product.product.images[0];
+      }
+    }
     return events;
+  }),
+  getProducts: publicProcedure.query(async ({ ctx }) => {
+    const products = await ctx.prisma.product.findMany();
+    return products;
   }),
   getAvailability: publicProcedure.query(async ({ ctx }) => {
 

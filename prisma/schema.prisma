@@ -15,8 +15,18 @@ model Event {
     title       String
     date        DateTime @db.Date
     timestamp   String
+    product     String
     description String
     url         String
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @default(now())
+}
+
+model Product {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    name        String
+    product     String
+    description String
     createdAt   DateTime @default(now())
     updatedAt   DateTime @default(now())
 }

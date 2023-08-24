@@ -5,6 +5,8 @@ import { api } from "@/utils/api";
 const Classes = () => {
   const { data: availableClasses, isLoading } =
     api.checkout.getAvailableClasses.useQuery();
+  
+    console.log(availableClasses);
 
   return (
     <div className="mt-8">

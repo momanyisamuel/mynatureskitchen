@@ -25,6 +25,7 @@ const AvailableClasses = ({ events }: AvailableClasesProps) => {
     refetch,
     isLoading,
   } = api.cookingClass.getEvents.useQuery();
+  console.log(classEvents);
   const now = new Date();
   const start = startOfWeek(
     new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1)

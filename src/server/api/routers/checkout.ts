@@ -61,11 +61,6 @@ export const CheckoutRouter = createTRPCRouter({
   }),
   getAvailableClasses: publicProcedure.query(async ({ ctx }) => {
 
-  
-  
-  
-    
-
     const availableClasses = await ctx.prisma.availability.findMany({
       include: { class: true },
     });

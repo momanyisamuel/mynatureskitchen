@@ -61,7 +61,7 @@ const Card: FC<CardProps> = ({ price }) => {
           onClick={() => addItemToCart(price)}
           className="bg-atlantis-500 hover:bg-atlantis-600"
         >
-          RSVP NOW<span className="sr-only">, {product.name}</span>
+          ADD TO CART<span className="sr-only">, {product.name}</span>
         </Button>
         {error && <p className="text-sm text-red-400">{error}</p>}
       </div>

@@ -21,6 +21,7 @@ interface CookingClass {
   description: string;
   url: string;
   timestamp: string;
+  product: string;
   date: DateValueType[];
 }
 
@@ -30,11 +31,13 @@ const initialData = {
   url: "",
   price: "",
   timestamp: "",
+  product: "",
   date: [],
 };
 
 const AddEvent: FC = ({}) => {
   const [formInput, setFormInput] = useState<CookingClass>(initialData);
+  const { data: prices } = api.checkout.getPrices.useQuery();
   const ctx = api.useContext()
   const addCookingClass = api.admin.addEvent.useMutation();
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,6 +59,13 @@ const AddEvent: FC = ({}) => {
     setFormInput((prev) => ({
       ...prev,
       date: [...newValue],
+    }));
+  };
+
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setFormInput((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.options[e.target.selectedIndex]?.value,
     }));
   };
 
@@ -110,6 +120,25 @@ const AddEvent: FC = ({}) => {
                 />
               </div>
               <div className="pb-6">
+              <Label htmlFor="product" className="mb-4">Associated Product</Label>
+              <select
+                name="product"
+                id=""
+                onChange={handleSelectChange}
+                className="rounded-md border-gray-200 w-full"
+              >
+                <option selected disabled>
+                  Select Product
+                </option>
+
+                {prices?.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.name}
+                  </option>
+                ))}
+              </select>
+              </div>
+              <div className="pb-6">
                 <Label
                   htmlFor="date"
                   className="mb-4 text-sm font-medium"
@@ -138,6 +167,7 @@ const AddEvent: FC = ({}) => {
                         description: formInput.description,
                         url: formInput.url,
                         timestamp: formInput.timestamp,
+                        product: formInput.product,
                         date: availDate
                           ? new Date(availDate.toString())
                           : new Date(),

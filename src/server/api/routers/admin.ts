@@ -100,18 +100,19 @@ export const adminRouter = createTRPCRouter({
         title: z.string(),
         description: z.string(),
         url: z.string(),
+        product: z.string(),
         timestamp: z.string(),
         date: z.date(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { title, description, url, timestamp, date } = input;
+      const { title, description, url, timestamp, date, product } = input;
 
       try {
         // Create the `CookingClass` in the database
 
         const event = await ctx.prisma.event.create({
-          data: { title, description, url, timestamp, date },
+          data: { title, description, url, timestamp, date, product },
         });
 
         return { ...event };
@@ -130,6 +131,45 @@ export const adminRouter = createTRPCRouter({
         });
 
         return event;
+
+      } catch (error) {
+        console.log(error)
+      }
+    }),
+    addProduct: adminProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        product: z.string(),
+        description: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, description, product } = input;
+
+      try {
+        // Create the `Product` in the database
+
+        const newProduct = await ctx.prisma.product.create({
+          data: { name, description, product },
+        });
+
+        return { ...newProduct };
+      } catch (error) {
+        console.log(error);
+      }
+    }),
+  deleteProduct: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input;
+      try {
+
+        const product = await ctx.prisma.product.delete({
+          where: { id },
+        });
+
+        return product;
 
       } catch (error) {
         console.log(error)

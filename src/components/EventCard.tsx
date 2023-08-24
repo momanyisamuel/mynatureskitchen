@@ -1,34 +1,36 @@
-import { format } from 'date-fns'
-import Link from 'next/link'
-import { type FC } from 'react'
-import { Button } from './ui/button'
+import { format } from "date-fns";
+import Link from "next/link";
+import { type FC } from "react";
+import { Button } from "./ui/button";
+import Image from "next/image";
 
 export type Event = {
-    id: string,
-    title: string,
-    description: string,
-    url: string,
-    timestamp: string,
-    date: Date,
-}
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  product: string;
+  timestamp: string;
+  date: Date;
+};
 
 interface EventCardProps {
-    classEvent: Event
+  classEvent: Event;
 }
 
-const EventCard: FC<EventCardProps> = ({classEvent}) => {
+const EventCard: FC<EventCardProps> = ({ classEvent }) => {
   return (
     <div>
       {" "}
       <div className="mb-5">
         <div className="relative">
           <div className="relative h-96 w-full overflow-hidden rounded-lg border">
-            {/* <Image
-        src={product.images[0] ? product.images[0] : ""}
-        alt={product.description}
-        className="object-contain"
-        fill
-      /> */}
+            <Image
+              src={classEvent.product}
+              alt={classEvent.title}
+              className="object-contain"
+              fill
+            />
           </div>
           <div className="relative mt-4">
             <h3 className="mb-4 font-serif text-3xl font-medium text-atlantis-900">
@@ -62,6 +64,6 @@ const EventCard: FC<EventCardProps> = ({classEvent}) => {
       </div>
     </div>
   );
-}
+};
 
-export default EventCard
+export default EventCard;
