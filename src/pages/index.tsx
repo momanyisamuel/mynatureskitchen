@@ -29,7 +29,7 @@ const Home: NextPageWithLayout = () => {
             <Link href="https://www.pcrm.org/letsbeatbreastcancer" className="">
               <div className="block w-[28rem] bg-atlantis-400 px-2 py-3 text-lg text-atlantis-900">
                 <p className="hover:underline">
-                  Upcoming event: Lets Beat Cancer Rally
+                  Upcoming event: Let’s Beat Breast Cancer Rally
                 </p>
               </div>
             </Link>
@@ -148,7 +148,7 @@ const Home: NextPageWithLayout = () => {
             </div>
             <div className="w-full sm:w-[50%] flex  justify-center items-center">
               <div className="w-full p-5 bg-atlantis-600 flex flex-col justify-center items-center">
-              <p className="text-lg text-atlantis-50 mb-2">Upcoming event: Lets Beat Cancer Rally</p>
+              <p className="text-lg text-atlantis-50 mb-2">Upcoming event: Let’s Beat Breast Cancer Rally</p>
               <Button variant="secondary" className="w-full"><Link href="https://www.pcrm.org/letsbeatbreastcancer">Learn more</Link></Button>
               </div>
             </div>
