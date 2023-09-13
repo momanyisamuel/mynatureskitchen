@@ -46,12 +46,6 @@ const Header: FC<HeaderProps> = ({ setCartSliderIsOpen }) => {
             <span className="">About</span>
           </Link>
           <Link
-            href="/shop"
-            className="border-b border-atlantis-900 py-3 pl-2 text-lg font-medium text-atlantis-900 hover:border-b hover:border-atlantis-900 sm:border-transparent sm:py-1 sm:pl-0"
-          >
-            <span className="">Shop</span>
-          </Link>
-          <Link
             href="/classes"
             className="border-b border-atlantis-900 py-3 pl-2 text-lg font-medium text-atlantis-900 hover:border-b hover:border-atlantis-900 sm:border-transparent sm:py-1 sm:pl-0"
           >
